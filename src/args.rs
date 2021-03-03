@@ -28,7 +28,7 @@ pub enum Privilege {
 
 #[derive(Debug)]
 pub enum Command {
-    Collect { path: String },
+    Collect { path: String, filter: String },
 }
 
 pub struct ClapArgumentLoader {}
@@ -61,6 +61,19 @@ impl ClapArgumentLoader {
                             .multiple(false)
                             .required(false)
                             .takes_value(true),
+                    )
+                    .arg(
+                        // ^(?!(\.\/node_modules\/|\.\/target\/)).*(\.rs|\.asm).*$      --> example for including all
+                        // .rs and .asm files that are not in [./node_modules/ or ./target/] root folders
+                        clap::Arg::with_name("filter")
+                            .short("f")
+                            .long("filter")
+                            .value_name("FILTER")
+                            .help("The regex pattern for filtering the files to include. An example that includes only [.rs | .asm] files if their path does not start with [./node_modules/ | ./target/] is the following line: \n^(?!(\\.\\/node_modules\\/|\\.\\/target\\/)).*(\\.rs|\\.asm).*$\n")
+                            .default_value("(?s).*") // match anything
+                            .multiple(false)
+                            .required(false)
+                            .takes_value(true),
                     ),
             )
             .get_matches();
@@ -74,6 +87,7 @@ impl ClapArgumentLoader {
         let cmd = if let Some(x) = command.subcommand_matches("collect") {
             Command::Collect {
                 path: x.value_of("path").unwrap().to_owned(), // should be covered by the clap arg being required
+                filter: x.value_of("filter").unwrap().to_owned(), // same as above
             }
         } else {
             return Err(Box::new(UnknownCommandError::new("unknown command")));

@@ -30,7 +30,7 @@ struct ToDoItem {
     file: String,
     line: u32,
 }
-
+use fancy_regex::Regex;
 const TODO_START_STR: &'static str = "// TODO!";
 const TODO_PARAMS_PARANTHESES_START: &'static str = "(";
 const TODO_PARAMS_PARANTHESES_END: &'static str = "):";
@@ -38,11 +38,12 @@ const TODO_PARAMS_SEPARATOR: &'static str = ",";
 const MIN_TODO_LEN: usize =
     TODO_START_STR.len() + TODO_PARAMS_PARANTHESES_START.len() + TODO_PARAMS_PARANTHESES_END.len() + 2;
 
-async fn collect(path: &str) -> Result<(), Box<dyn Error>> {
+async fn collect(path: &str, filter: &str) -> Result<(), Box<dyn Error>> {
     let mut todos = HashMap::<String, Vec<ToDoItem>>::new();
     let mut todo_start_str_combined = String::new();
     todo_start_str_combined.push_str(TODO_START_STR);
     todo_start_str_combined.push_str(TODO_PARAMS_PARANTHESES_START);
+    let matcher = Regex::new(filter)?;
     for entry in WalkDir::new(path)
         .into_iter()
         .filter_map(Result::ok)
@@ -50,6 +51,9 @@ async fn collect(path: &str) -> Result<(), Box<dyn Error>> {
     {
         let entry_path = entry.into_path();
         let entry_path_str = entry_path.to_str().unwrap();
+        if !matcher.is_match(entry_path_str)? {
+            continue;
+        }
         let file_content = fs::read(entry_path_str)?;
         let mut cursor = Cursor::new(file_content);
         let mut buf = String::new();
@@ -99,8 +103,8 @@ async fn collect(path: &str) -> Result<(), Box<dyn Error>> {
 async fn main_async() -> Result<(), Box<dyn Error>> {
     let args = ClapArgumentLoader::load().await?;
     match args.command {
-        | Command::Collect { path } => {
-            collect(&path).await?;
+        | Command::Collect { path, filter } => {
+            collect(&path, &filter).await?;
             Ok(())
         },
     }
