@@ -1,0 +1,50 @@
+name: pipeline
+on: push
+
+jobs:
+  check:
+    name: check (${{ matrix.name }})
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        include:
+        - name: "default"
+          features: ""
+    steps:
+    - uses: actions/checkout@v1
+    - name: install tools
+      run: sudo apt-get install build-essential
+    - name: check formatting
+      run: cargo fmt --all -- --check
+    - name: check README.md synchronization
+      run: |
+        cargo install --force cargo-sync-readme
+        cargo sync-readme -c
+    - name: scan code
+      run: |
+        rustup component add clippy
+        cargo clippy --all-targets ${{ matrix.features }} -- -D warnings
+    - name: execute unit tests
+      run: cargo test ${{ matrix.features }}
+    - name: build program
+      run: cargo build ${{ matrix.features }}
+
+  website:
+    name: website
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@master
+        with: 
+          submodules: true
+      - name: install
+        run: sudo apt-get install build-essential && cargo install mdbook --version=0.4.7
+      - name: build
+        working-directory: docs/wiki
+        run: mdbook build
+      - name: deploy
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: docs/wiki/book
+          publish_branch: wiki
+
