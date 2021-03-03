@@ -24,4 +24,3 @@ macro_rules! make_error {
 }
 
 make_error!(UnknownCommandError);
-

@@ -57,16 +57,16 @@ async fn collect(path: &str) -> Result<(), Box<dyn Error>> {
         let mut line = 0;
         loop {
             match cursor.read_line(&mut buf) {
-                Ok(size) => {
+                | Ok(size) => {
                     if size <= 0 {
-                        break
+                        break;
                     }
-                }
-                Err(_) => break
+                },
+                | Err(_) => break,
             }
 
             buf = buf.trim().to_owned();
-            if let Some(start_idx) = buf.find(&todo_start_str_combined) { 
+            if let Some(start_idx) = buf.find(&todo_start_str_combined) {
                 let sub_buf = &buf[start_idx..];
                 println!("{}", &sub_buf);
                 if sub_buf.len() < MIN_TODO_LEN {
