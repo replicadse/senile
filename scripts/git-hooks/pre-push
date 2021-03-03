@@ -1,0 +1,2 @@
+#!/bin/sh
+bash ./do.sh scan
