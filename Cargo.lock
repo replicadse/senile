@@ -34,18 +34,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "senile"
-version = "0.0.0"
-dependencies = [
- "async-trait",
- "clap",
- "futures",
- "serde",
- "serde_json",
- "walkdir",
-]
-
-[[package]]
 name = "bitflags"
 version = "1.2.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -240,6 +228,18 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "93fc1dc3aaa9bfed95e02e6eadabb4baf7e3078b0bd1b4d7b6b0b68378900502"
 dependencies = [
  "winapi-util",
+]
+
+[[package]]
+name = "senile"
+version = "0.0.0"
+dependencies = [
+ "async-trait",
+ "clap",
+ "futures",
+ "serde",
+ "serde_json",
+ "walkdir",
 ]
 
 [[package]]
