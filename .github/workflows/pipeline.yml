@@ -47,4 +47,3 @@ jobs:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: docs/wiki/book
           publish_branch: wiki
-
