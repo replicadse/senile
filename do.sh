@@ -5,6 +5,11 @@ case $1 in
         printf 'No\n'
         ;;
 
+    update-version)
+        sed 's/version = "0.0.0"/version = "'$2'"/g' Cargo.toml > Cargo.toml.tmp
+        mv Cargo.toml.tmp Cargo.toml
+        ;;
+
     init)
         # install hooks
         rm -rf .git/hooks
