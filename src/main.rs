@@ -48,7 +48,6 @@ async fn collect(path: &str) -> Result<(), Box<dyn Error>> {
         .filter_map(Result::ok)
         .filter(|e| !e.file_type().is_dir())
     {
-        // println!("{:?}", entry.into_path());
         let entry_path = entry.into_path();
         let entry_path_str = entry_path.to_str().unwrap();
         let file_content = fs::read(entry_path_str)?;
@@ -68,7 +67,6 @@ async fn collect(path: &str) -> Result<(), Box<dyn Error>> {
             buf = buf.trim().to_owned();
             if let Some(start_idx) = buf.find(&todo_start_str_combined) {
                 let sub_buf = &buf[start_idx..];
-                println!("{}", &sub_buf);
                 if sub_buf.len() < MIN_TODO_LEN {
                     continue;
                 }
