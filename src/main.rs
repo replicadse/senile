@@ -16,7 +16,7 @@ use walkdir::WalkDir;
 mod args;
 mod error;
 use std::{
-    collections::HashMap,
+    collections::BTreeMap,
     fs,
     io::{
         prelude::*,
@@ -199,7 +199,7 @@ fn collect(path: String, filter: String, workers: usize) -> Result<(), Box<dyn E
     }
     crawler_thread.join().expect("the crawler thread has panicked");
 
-    let mut all_todos = HashMap::<String, Vec<ToDoItem>>::new();
+    let mut all_todos = BTreeMap::<String, Vec<ToDoItem>>::new();
     drop(sender_parser); // drop orginal sender_parser to eliminate the +1 original copy from
                          // num_threads+1
     for todo in receiver_parser {
