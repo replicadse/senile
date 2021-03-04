@@ -28,7 +28,11 @@ pub enum Privilege {
 
 #[derive(Debug)]
 pub enum Command {
-    Collect { path: String, filter: String },
+    Collect {
+        path: String,
+        filter: String,
+        workers: usize,
+    },
 }
 
 pub struct ClapArgumentLoader {}
@@ -60,8 +64,7 @@ impl ClapArgumentLoader {
                             .default_value("./")
                             .multiple(false)
                             .required(false)
-                            .takes_value(true),
-                    )
+                            .takes_value(true))
                     .arg(
                         // ^(?!(\.\/node_modules\/|\.\/target\/)).*(\.rs|\.asm).*$      --> example for including all
                         // .rs and .asm files that are not in [./node_modules/ or ./target/] root folders
@@ -73,9 +76,17 @@ impl ClapArgumentLoader {
                             .default_value("(?s).*") // match anything
                             .multiple(false)
                             .required(false)
-                            .takes_value(true),
-                    ),
-            )
+                            .takes_value(true))
+                    .arg(
+                        clap::Arg::with_name("workers")
+                            .short("w")
+                            .long("workers")
+                            .value_name("WORKERS")
+                            .help("The amount of worker threads used when parsing the file contents.")
+                            .default_value("4")
+                            .multiple(false)
+                            .required(false)
+                            .takes_value(true)))
             .get_matches();
 
         let privilege = if command.is_present("experimental") {
@@ -88,6 +99,7 @@ impl ClapArgumentLoader {
             Command::Collect {
                 path: x.value_of("path").unwrap().to_owned(), // should be covered by the clap arg being required
                 filter: x.value_of("filter").unwrap().to_owned(), // same as above
+                workers: x.value_of("workers").unwrap().parse::<usize>()?,
             }
         } else {
             return Err(Box::new(UnknownCommandError::new("unknown command")));

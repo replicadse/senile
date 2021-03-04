@@ -1,4 +1,3 @@
-use threadpool::ThreadPool;
 use std::{
     error::Error,
     str,
@@ -13,6 +12,7 @@ use crossbeam::{
     sync::WaitGroup,
 };
 use futures::executor::block_on;
+use threadpool::ThreadPool;
 use walkdir::WalkDir;
 mod args;
 mod error;
@@ -156,7 +156,7 @@ impl<'s> Crawler<'s> {
     }
 }
 
-fn collect(path: String, filter: String) -> Result<(), Box<dyn Error>> {
+fn collect(path: String, filter: String, workers: usize) -> Result<(), Box<dyn Error>> {
     let (sender_crawler, receiver_crawler) = unbounded();
 
     // fire and forget thread
@@ -169,8 +169,7 @@ fn collect(path: String, filter: String) -> Result<(), Box<dyn Error>> {
     let wg = WaitGroup::new();
     let (sender_parser, receiver_parser) = unbounded();
 
-    let n_workers = 4;
-    let pool = ThreadPool::new(n_workers);
+    let pool = ThreadPool::new(workers);
 
     for s in receiver_crawler.iter() {
         let thread_wg = wg.clone();
@@ -218,8 +217,8 @@ fn collect(path: String, filter: String) -> Result<(), Box<dyn Error>> {
 async fn main_async() -> Result<(), Box<dyn Error>> {
     let args = ClapArgumentLoader::load().await?;
     match args.command {
-        | Command::Collect { path, filter } => {
-            collect(path, filter)?;
+        | Command::Collect { path, filter, workers } => {
+            collect(path, filter, workers)?;
             Ok(())
         },
     }
