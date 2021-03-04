@@ -200,7 +200,8 @@ fn collect(path: String, filter: String, workers: usize) -> Result<(), Box<dyn E
     crawler_thread.join().expect("the crawler thread has panicked");
 
     let mut all_todos = HashMap::<String, Vec<ToDoItem>>::new();
-    drop(sender_parser); // drop orginal sender_parser to eliminate the +1 original copy from num_threads+1
+    drop(sender_parser); // drop orginal sender_parser to eliminate the +1 original copy from
+                         // num_threads+1
     for todo in receiver_parser {
         all_todos.entry(todo.priority.to_owned()).or_insert(Vec::new());
         all_todos.get_mut(&todo.priority).unwrap().push(todo);
