@@ -1,6 +1,6 @@
 macro_rules! make_error {
     ($name:ident) => {
-        #[derive(Debug)]
+        #[derive(Debug, Clone)]
         pub struct $name {
             details: String,
         }
@@ -24,3 +24,4 @@ macro_rules! make_error {
 }
 
 make_error!(UnknownCommandError);
+make_error!(ParserError);
