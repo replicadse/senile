@@ -205,7 +205,7 @@ fn collect(path: String, filter: String, workers: usize) -> Result<(), Box<dyn E
     }
     wg.wait();
 
-    //let output = serde_json::to_vec_pretty(&all_todos)?;
+    // let output = serde_json::to_vec_pretty(&all_todos)?;
     let output = serde_json::to_vec(&all_todos)?;
     let stdout = std::io::stdout();
     let mut stdout_lock = stdout.lock();
@@ -223,4 +223,3 @@ fn main() -> Result<(), Box<dyn Error>> {
         },
     }
 }
-
