@@ -22,6 +22,8 @@ All features that are marked as `experimental` are _not_ considered a public API
 |Name|Short|Long|Description|Remark|Status|
 |-- |-- |-- |-- |-- |--|
 |Path|-p|--path|The path from which to start traversal.|None|stable|
+|Workers|-w|--workers|The amount of workers (threads) used when parsing the collected files.|None|stable|
+|Filter|-f|--filter|The regex for filtering the files that are to be parsed.|None|stable|
 
 **Examples:**
 * `senile collect`
