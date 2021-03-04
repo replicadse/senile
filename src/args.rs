@@ -12,7 +12,7 @@ pub struct CallArgs {
 }
 
 impl CallArgs {
-    pub async fn validate(&self) -> Result<(), Box<dyn Error>> {
+    pub fn validate(&self) -> Result<(), Box<dyn Error>> {
         match self.privilege {
             | Privilege::Normal => Ok(()),
             | Privilege::Experimental => Ok(()),
@@ -38,7 +38,7 @@ pub enum Command {
 pub struct ClapArgumentLoader {}
 
 impl ClapArgumentLoader {
-    pub async fn load() -> Result<CallArgs, Box<dyn Error>> {
+    pub fn load() -> Result<CallArgs, Box<dyn Error>> {
         let command = clap::App::new("senile")
             .version(env!("CARGO_PKG_VERSION"))
             .about("senile")
@@ -110,7 +110,7 @@ impl ClapArgumentLoader {
             command: cmd,
         };
 
-        callargs.validate().await?;
+        callargs.validate()?;
         Ok(callargs)
     }
 }

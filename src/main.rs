@@ -11,7 +11,6 @@ use crossbeam::{
     },
     sync::WaitGroup,
 };
-use futures::executor::block_on;
 use threadpool::ThreadPool;
 use walkdir::WalkDir;
 mod args;
@@ -206,6 +205,7 @@ fn collect(path: String, filter: String, workers: usize) -> Result<(), Box<dyn E
     }
     wg.wait();
 
+    //let output = serde_json::to_vec_pretty(&all_todos)?;
     let output = serde_json::to_vec(&all_todos)?;
     let stdout = std::io::stdout();
     let mut stdout_lock = stdout.lock();
@@ -214,8 +214,8 @@ fn collect(path: String, filter: String, workers: usize) -> Result<(), Box<dyn E
     Ok(())
 }
 
-async fn main_async() -> Result<(), Box<dyn Error>> {
-    let args = ClapArgumentLoader::load().await?;
+fn main() -> Result<(), Box<dyn Error>> {
+    let args = ClapArgumentLoader::load()?;
     match args.command {
         | Command::Collect { path, filter, workers } => {
             collect(path, filter, workers)?;
@@ -224,6 +224,3 @@ async fn main_async() -> Result<(), Box<dyn Error>> {
     }
 }
 
-fn main() -> Result<(), Box<dyn Error>> {
-    block_on(main_async())
-}
