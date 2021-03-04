@@ -1,3 +1,4 @@
+use threadpool::ThreadPool;
 use std::{
     error::Error,
     str,
@@ -35,8 +36,6 @@ use serde::{
 };
 
 use crate::error::ParserError;
-
-// TODO!(2, haw): Add multithreading support for reading the files.
 
 struct ContentParserParams {
     file: String,
@@ -169,11 +168,16 @@ fn collect(path: String, filter: String) -> Result<(), Box<dyn Error>> {
 
     let wg = WaitGroup::new();
     let (sender_parser, receiver_parser) = unbounded();
+
+    let n_workers = 4;
+    let pool = ThreadPool::new(n_workers);
+
     for s in receiver_crawler.iter() {
         let thread_wg = wg.clone();
         let thread_sender = sender_parser.clone();
-        thread::spawn(move || {
+        pool.execute(move || {
             let dothis = move || -> Result<(), Box<dyn Error>> {
+                // TODO!(1, haw): Move this into shared content parser arguments
                 let mut todo_start_str_combined = String::new();
                 todo_start_str_combined.push_str(TODO_START_STR);
                 todo_start_str_combined.push_str(TODO_PARAMS_PARANTHESES_START);
