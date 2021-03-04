@@ -15,8 +15,6 @@ case $1 in
         rm -rf .git/hooks
         ln -s ../scripts/git-hooks .git/hooks
         chmod -R +x ./scripts/*
-        # install tools
-        cargo install cargo-sync-readme
         ;;
 
     cover)
@@ -28,8 +26,8 @@ case $1 in
         ;;
 
     scan)
-        cargo clippy --all-targets --all-features -- -D warnings
+        #cargo clippy --all-targets --all-features -- -D warnings
         cargo fmt --all -- --check
-        cargo sync-readme -c
+        #cargo sync-readme -c
         ;;
 esac
