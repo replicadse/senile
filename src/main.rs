@@ -94,9 +94,10 @@ async fn collect(path: &str, filter: &str) -> Result<(), Box<dyn Error>> {
         }
     }
     let output = serde_json::to_vec(&todos)?;
-    let mut stdout = std::io::stdout();
-    stdout.write(&output)?;
-    stdout.flush()?;
+    let stdout = std::io::stdout();
+    let mut stdout_lock = stdout.lock();
+    stdout_lock.write(&output)?;
+    stdout_lock.flush()?;
     Ok(())
 }
 
