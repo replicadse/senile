@@ -66,13 +66,13 @@ impl ClapArgumentLoader {
                             .required(false)
                             .takes_value(true))
                     .arg(
-                        // ^(?!(\.\/node_modules\/|\.\/target\/)).*(\.rs|\.asm).*$      --> example for including all
+                        // ^(?!(\.\/node_modules\/|\.\/target\/)).*(\.rs|\.asm)$      --> example for including all
                         // .rs and .asm files that are not in [./node_modules/ or ./target/] root folders
                         clap::Arg::with_name("filter")
                             .short("f")
                             .long("filter")
                             .value_name("FILTER")
-                            .help("The regex pattern for filtering the files to include. An example that includes only [.rs | .asm] files if their path does not start with [./node_modules/ | ./target/] is the following line: \n^(?!(\\.\\/node_modules\\/|\\.\\/target\\/)).*(\\.rs|\\.asm).*$\n")
+                            .help("The regex pattern for filtering the files to include. An example that includes only [.rs | .asm] files if their path does not start with [./node_modules/ | ./target/] is the following line: \n^(?!(\\.\\/node_modules\\/|\\.\\/target\\/)).*(\\.rs|\\.asm)$\n")
                             .default_value("(?s).*") // match anything
                             .multiple(false)
                             .required(false)
