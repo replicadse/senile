@@ -100,7 +100,7 @@
 
         <nav id="sidebar" class="sidebar" aria-label="Table of contents">
             <div class="sidebar-scrollbox">
-                <ol class="chapter"><li class="chapter-item "><a href="introduction/root.html"><strong aria-hidden="true">1.</strong> Introduction</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="introduction/installation.html"><strong aria-hidden="true">1.1.</strong> How to install</a></li><li class="chapter-item "><a href="introduction/security.html"><strong aria-hidden="true">1.2.</strong> Security</a></li><li class="chapter-item "><a href="introduction/command-reference.html"><strong aria-hidden="true">1.3.</strong> Command reference</a></li></ol></li><li class="chapter-item "><a href="adrs/root.html"><strong aria-hidden="true">2.</strong> ADRs</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="adrs/1-usage-of-adrs.html"><strong aria-hidden="true">2.1.</strong> 1-usage-of-adrs</a></li><li class="chapter-item "><a href="adrs/2-usage-of-keywords.html"><strong aria-hidden="true">2.2.</strong> 2-usage-of-keywords</a></li><li class="chapter-item "><a href="adrs/3-versioning.html"><strong aria-hidden="true">2.3.</strong> 3-versioning</a></li><li class="chapter-item "><a href="adrs/4-experimental-flag.html"><strong aria-hidden="true">2.4.</strong> 4-experimental-flag</a></li><li class="chapter-item "><a href="adrs/5-usage-of-feature-flags.html"><strong aria-hidden="true">2.5.</strong> 5-usage-of-feature-flags</a></li></ol></li><li class="chapter-item "><a href="rfcs/root.html"><strong aria-hidden="true">3.</strong> RFCs</a></li></ol>
+                <ol class="chapter"><li class="chapter-item "><a href="introduction/root.html"><strong aria-hidden="true">1.</strong> Introduction</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="introduction/installation.html"><strong aria-hidden="true">1.1.</strong> How to install</a></li><li class="chapter-item "><a href="introduction/security.html"><strong aria-hidden="true">1.2.</strong> Security</a></li><li class="chapter-item "><a href="introduction/Reference.html"><strong aria-hidden="true">1.3.</strong> Reference</a></li></ol></li><li class="chapter-item "><a href="adrs/root.html"><strong aria-hidden="true">2.</strong> ADRs</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="adrs/1-usage-of-adrs.html"><strong aria-hidden="true">2.1.</strong> 1-usage-of-adrs</a></li><li class="chapter-item "><a href="adrs/2-usage-of-keywords.html"><strong aria-hidden="true">2.2.</strong> 2-usage-of-keywords</a></li><li class="chapter-item "><a href="adrs/3-versioning.html"><strong aria-hidden="true">2.3.</strong> 3-versioning</a></li><li class="chapter-item "><a href="adrs/4-experimental-flag.html"><strong aria-hidden="true">2.4.</strong> 4-experimental-flag</a></li><li class="chapter-item "><a href="adrs/5-usage-of-feature-flags.html"><strong aria-hidden="true">2.5.</strong> 5-usage-of-feature-flags</a></li></ol></li><li class="chapter-item "><a href="rfcs/root.html"><strong aria-hidden="true">3.</strong> RFCs</a></li></ol>
             </div>
             <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
         </nav>
@@ -213,30 +213,7 @@ Install the software by executing:</p>
 </code></pre>
 <h1 id="security-policy"><a class="header" href="#security-policy">Security Policy</a></h1>
 <p>The security police ist hosted as <a href="https://github.com/replicadse/senile/blob/master/SECURITY.md">file on GitHub</a>.</p>
-<h1 id="command-reference"><a class="header" href="#command-reference">Command reference</a></h1>
-<h2 id="disclaimer"><a class="header" href="#disclaimer">Disclaimer</a></h2>
-<p>All features that are marked as <code>experimental</code> are <em>not</em> considered a public API and therefore eplicitly not covered by the backwards-compatibility policy inside a major version (see <a href="https://semver.org">semver v2</a>). Use these features on your own risk!</p>
-<h2 id="application-level-arguments"><a class="header" href="#application-level-arguments">Application level arguments</a></h2>
-<table><thead><tr><th>Name</th><th>Short</th><th>Long</th><th>Description</th></tr></thead><tbody>
-<tr><td>Experimental</td><td>-e</td><td>--experimental</td><td>Activates experimental features that are not stable yet. All features that are marked as experimental are ignored when keeping backwards compatibility inside one major version.</td></tr>
-</tbody></table>
-<h2 id="commands"><a class="header" href="#commands">Commands</a></h2>
-<table><thead><tr><th>Command</th><th>Description</th><th>Status</th></tr></thead><tbody>
-<tr><td>help</td><td>Prints the help to <code>STDOUT</code>.</td><td>stable</td></tr>
-<tr><td>collect</td><td>Collects the todo statements</td><td>stable</td></tr>
-</tbody></table>
-<h2 id="collect-command-flags"><a class="header" href="#collect-command-flags"><code>collect</code> command flags</a></h2>
-<table><thead><tr><th>Name</th><th>Short</th><th>Long</th><th>Description</th><th>Remark</th><th>Status</th></tr></thead><tbody>
-<tr><td>Path</td><td>-p</td><td>--path</td><td>The path from which to start traversal.</td><td>None</td><td>stable</td></tr>
-<tr><td>Workers</td><td>-w</td><td>--workers</td><td>The amount of workers (threads) used when parsing the collected files.</td><td>None</td><td>stable</td></tr>
-<tr><td>Filter</td><td>-f</td><td>--filter</td><td>The regex for filtering the files that are to be parsed.</td><td>None</td><td>stable</td></tr>
-</tbody></table>
-<p><strong>Examples:</strong></p>
-<ul>
-<li><code>senile collect</code></li>
-<li><code>senile collect -p ./src</code></li>
-<li><code>senile collect -p ./src &gt; todos.json</code></li>
-</ul>
+<h1 id="reference"><a class="header" href="#reference">Reference</a></h1>
 <h1 id="architecture-decision-records"><a class="header" href="#architecture-decision-records">Architecture Decision Records</a></h1>
 <p>are designed to keep track of decisions that affect the development process and the product.</p>
 <h1 id="1-usage-of-adrs"><a class="header" href="#1-usage-of-adrs">1-usage-of-adrs</a></h1>
