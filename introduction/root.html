@@ -191,6 +191,7 @@ It will output a json formatted string to <code>STDOUT</code> as follows:</p>
       &quot;prio&quot;: &quot;$priority&quot;,
       &quot;assignee&quot;: &quot;$assignee&quot;,
       &quot;body&quot;: &quot;$todo_body&quot;,
+      &quot;context&quot;: &quot;$context_lines&quot;,
       &quot;file&quot;: &quot;$fq_relative_file_path&quot;,
       &quot;line&quot;: $line
     },
@@ -198,7 +199,7 @@ It will output a json formatted string to <code>STDOUT</code> as follows:</p>
   ]
 }
 </code></pre>
-<p>In order for <code>senile</code> to understand your todo statements, the format is fixed (subject to change) to the following: <code>// TODO!($prio, $assignee): $todo_body</code></p>
+<p>In order for <code>senile</code> to understand your todo statements, the format is fixed (subject to change) to the following: <code>// TODO!($prio, $assignee, $context_lines): $todo_body</code></p>
 
                     </main>
 
