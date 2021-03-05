@@ -3,7 +3,7 @@
 - [Introduction](./introduction/root.md)
   - [How to install](./introduction/installation.md)
   - [Security](./introduction/security.md)
-  - [Reference](./introduction/Reference.md)
+  - [Reference](./introduction/reference.md)
 - [ADRs](./adrs/root.md)
   - [1-usage-of-adrs](./adrs/1-usage-of-adrs.md)
   - [2-usage-of-keywords](./adrs/2-usage-of-keywords.md)
