@@ -3,7 +3,10 @@ use std::{
     result::Result,
 };
 
-use crate::error::{ArgumentError, UnknownCommandError};
+use crate::error::{
+    ArgumentError,
+    UnknownCommandError,
+};
 
 #[derive(Debug)]
 pub struct CallArgs {

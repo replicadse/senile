@@ -88,7 +88,6 @@ impl<'s> ContentParser<'s> {
         Ok(todos)
     }
 
-
     // |01234567 // TODO!(a, b, c): test
     //  ^        ^        ^      ^
     //  0        9        18     25
@@ -97,13 +96,14 @@ impl<'s> ContentParser<'s> {
         if let Some(start_idx) = buf.find(&self.params.start_literal) {
             let p_error = ParserError::new(&format!("failed to parse line {} in file {}", line, self.params.file));
             let sub_buf = &buf[start_idx..];
-            if sub_buf.len() < self.params.min_todo_length { 
+            if sub_buf.len() < self.params.min_todo_length {
                 return Err(Box::new(p_error.clone()));
             }
             let params_start_idx = self.params.start_literal.len(); // index of first char of params
             let params_close_idx = sub_buf[params_start_idx..]
                 .find(&self.params.end_literal)
-                .ok_or(Box::new(p_error.clone()))? + params_start_idx;
+                .ok_or(Box::new(p_error.clone()))?
+                + params_start_idx;
             let parameters = &mut sub_buf[params_start_idx..params_close_idx].split(C_TODO_PARAM_SEPARATOR);
             let prio = parameters.next().ok_or(Box::new(p_error.clone()))?.trim();
             let assignee = parameters.next().ok_or(Box::new(p_error.clone()))?.trim();
@@ -174,7 +174,13 @@ impl<'s> Crawler<'s> {
     }
 }
 
-fn collect(path: String, filter: String, workers: usize, start_literal: String, end_literal: String) -> Result<(), Box<dyn Error>> {
+fn collect(
+    path: String,
+    filter: String,
+    workers: usize,
+    start_literal: String,
+    end_literal: String,
+) -> Result<(), Box<dyn Error>> {
     let (sender_crawler, receiver_crawler) = unbounded();
 
     // fire and forget thread
@@ -188,7 +194,10 @@ fn collect(path: String, filter: String, workers: usize, start_literal: String, 
     let (sender_parser, receiver_parser) = unbounded();
 
     let pool = ThreadPool::new(workers);
-    let min_todo_length = start_literal.len() + C_TODO_PARAM_COUNT + (C_TODO_PARAM_SEPARATOR.len()*C_TODO_PARAM_COUNT-1) + end_literal.len();
+    let min_todo_length = start_literal.len()
+        + C_TODO_PARAM_COUNT
+        + (C_TODO_PARAM_SEPARATOR.len() * C_TODO_PARAM_COUNT - 1)
+        + end_literal.len();
 
     for s in receiver_crawler.iter() {
         let thread_wg = wg.clone();
@@ -238,7 +247,13 @@ fn collect(path: String, filter: String, workers: usize, start_literal: String, 
 fn main() -> Result<(), Box<dyn Error>> {
     let args = ClapArgumentLoader::load()?;
     match args.command {
-        | Command::Collect { path, filter, workers, start_literal, end_literal } => {
+        | Command::Collect {
+            path,
+            filter,
+            workers,
+            start_literal,
+            end_literal,
+        } => {
             collect(path, filter, workers, start_literal, end_literal)?;
             Ok(())
         },
