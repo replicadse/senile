@@ -13,8 +13,18 @@ use crossbeam::{
 };
 use threadpool::ThreadPool;
 use walkdir::WalkDir;
+
+use crate::{
+    parser::{
+        ContentParser,
+        ContentParserParams,
+    },
+    types::ToDoItem,
+};
 mod args;
 mod error;
+mod parser;
+mod types;
 use std::{
     collections::BTreeMap,
     fs,
@@ -29,125 +39,6 @@ use args::{
     Command,
 };
 use fancy_regex::Regex;
-use serde::{
-    Deserialize,
-    Serialize,
-};
-
-use crate::error::ParserError;
-
-struct ContentParserParams {
-    file: String,
-    start_literal: String,
-    end_literal: String,
-    min_todo_length: usize,
-}
-struct ContentParserState {}
-struct ContentParser<'s> {
-    cursor: &'s mut Cursor<Vec<u8>>,
-    params: ContentParserParams,
-    #[allow(dead_code)]
-    state: ContentParserState,
-}
-impl<'s> ContentParser<'s> {
-    pub fn new(cursor: &'s mut Cursor<Vec<u8>>, params: ContentParserParams) -> Self {
-        Self {
-            cursor,
-            params,
-            state: ContentParserState {},
-        }
-    }
-
-    pub fn parse(&mut self) -> Result<Vec<ToDoItem>, Box<dyn Error>> {
-        let mut todos = Vec::<ToDoItem>::new();
-        let mut buf = String::new();
-        let mut line = 0u32;
-        loop {
-            match self.cursor.read_line(&mut buf) {
-                | Ok(size) => {
-                    if size <= 0 {
-                        break;
-                    }
-                },
-                | Err(_) => continue,
-            }
-
-            buf = buf.trim().to_owned();
-            if let Ok(res) = self.parse_buf(line, &buf) {
-                match res {
-                    | Some(v) => {
-                        todos.push(v);
-                    },
-                    | None => {},
-                }
-            }
-
-            buf.clear();
-            line += 1;
-        }
-        Ok(todos)
-    }
-
-    // |01234567 // TODO!(a, b, c): test
-    //  ^        ^        ^      ^
-    //  0        9        18     25
-
-    fn parse_buf(&mut self, line: u32, buf: &str) -> Result<Option<ToDoItem>, Box<dyn Error>> {
-        if let Some(start_idx) = buf.find(&self.params.start_literal) {
-            let p_error = ParserError::new(&format!("failed to parse line {} in file {}", line, self.params.file));
-            let sub_buf = &buf[start_idx..];
-            if sub_buf.len() < self.params.min_todo_length {
-                return Err(Box::new(p_error.clone()));
-            }
-            let params_start_idx = self.params.start_literal.len(); // index of first char of params
-            let params_close_idx = sub_buf[params_start_idx..]
-                .find(&self.params.end_literal)
-                .ok_or(Box::new(p_error.clone()))?
-                + params_start_idx;
-            let parameters = &mut sub_buf[params_start_idx..params_close_idx].split(C_TODO_PARAM_SEPARATOR);
-            let prio = parameters.next().ok_or(Box::new(p_error.clone()))?.trim();
-            let assignee = parameters.next().ok_or(Box::new(p_error.clone()))?.trim();
-            let next_lines = parameters.next().ok_or(Box::new(p_error.clone()))?.trim();
-            let next_lines_nr = next_lines.parse::<usize>()?;
-            let content = sub_buf[params_close_idx + &self.params.end_literal.len()..].trim();
-            let mut context = Vec::<String>::new();
-            for _ in 0..next_lines_nr {
-                let mut line_buf = String::new();
-                if let Ok(size) = self.cursor.read_line(&mut line_buf) {
-                    if size <= 0 {
-                        break;
-                    }
-                    context.push(line_buf);
-                }
-            }
-
-            Ok(Some(ToDoItem {
-                priority: prio.to_owned(),
-                body: content.to_owned(),
-                assignee: assignee.to_owned(),
-                context,
-                file: self.params.file.to_owned(),
-                line,
-            }))
-        } else {
-            Ok(None)
-        }
-    }
-}
-
-#[derive(Debug, Serialize, Deserialize)]
-struct ToDoItem {
-    priority: String,
-    body: String,
-    assignee: String,
-    context: Vec<String>,
-    file: String,
-    line: u32,
-}
-
-// TODO!(min,haw,2): make these modifiable, maybe?
-const C_TODO_PARAM_SEPARATOR: &str = ",";
-const C_TODO_PARAM_COUNT: usize = 3;
 
 struct Crawler<'s> {
     matcher: &'s Regex,
@@ -194,10 +85,6 @@ fn collect(
     let (sender_parser, receiver_parser) = unbounded();
 
     let pool = ThreadPool::new(workers);
-    let min_todo_length = start_literal.len()
-        + C_TODO_PARAM_COUNT
-        + (C_TODO_PARAM_SEPARATOR.len() * C_TODO_PARAM_COUNT - 1)
-        + end_literal.len();
 
     for s in receiver_crawler.iter() {
         let thread_wg = wg.clone();
@@ -212,7 +99,6 @@ fn collect(
                     file: s,
                     start_literal: thread_start_literal,
                     end_literal: thread_end_literal,
-                    min_todo_length,
                 });
                 let todos = parser.parse()?;
                 for t in todos {
