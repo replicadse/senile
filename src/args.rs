@@ -3,7 +3,7 @@ use std::{
     result::Result,
 };
 
-use crate::error::UnknownCommandError;
+use crate::error::{ArgumentError, UnknownCommandError};
 
 #[derive(Debug)]
 pub struct CallArgs {
@@ -32,6 +32,8 @@ pub enum Command {
         path: String,
         filter: String,
         workers: usize,
+        start_literal: String,
+        end_literal: String,
     },
 }
 
@@ -86,6 +88,15 @@ impl ClapArgumentLoader {
                             .default_value("4")
                             .multiple(false)
                             .required(false)
+                            .takes_value(true))
+                    .arg(
+                        clap::Arg::with_name("format")
+                            .long("format")
+                            .value_name("FORMAT")
+                            .help("The format of the TODO statements in the source. Format separated with commas in the order \"start_literal\", \"end_literal\".")
+                            .default_value("// TODO!(,):")
+                            .multiple(false)
+                            .required(false)
                             .takes_value(true)))
             .get_matches();
 
@@ -96,10 +107,18 @@ impl ClapArgumentLoader {
         };
 
         let cmd = if let Some(x) = command.subcommand_matches("collect") {
+            let format_arg = x.value_of("format").unwrap().split(",").collect::<Vec<&str>>();
+            if format_arg.len() != 2 {
+                return Err(Box::new(ArgumentError::new("invalid format")));
+            };
+            let start_literal = format_arg[0].to_owned();
+            let end_literal = format_arg[1].to_owned();
             Command::Collect {
                 path: x.value_of("path").unwrap().to_owned(), // should be covered by the clap arg being required
                 filter: x.value_of("filter").unwrap().to_owned(), // same as above
-                workers: x.value_of("workers").unwrap().parse::<usize>()?,
+                workers: x.value_of("workers").unwrap().parse::<usize>()?, // same as above
+                start_literal,
+                end_literal,
             }
         } else {
             return Err(Box::new(UnknownCommandError::new("unknown command")));

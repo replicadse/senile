@@ -38,20 +38,22 @@ use crate::error::ParserError;
 
 struct ContentParserParams {
     file: String,
-    todo_start_str_combined: String,
+    start_literal: String,
+    end_literal: String,
+    min_todo_length: usize,
 }
 struct ContentParserState {}
 struct ContentParser<'s> {
     cursor: &'s mut Cursor<Vec<u8>>,
-    info: ContentParserParams,
+    params: ContentParserParams,
     #[allow(dead_code)]
     state: ContentParserState,
 }
 impl<'s> ContentParser<'s> {
-    pub fn new(cursor: &'s mut Cursor<Vec<u8>>, info: ContentParserParams) -> Self {
+    pub fn new(cursor: &'s mut Cursor<Vec<u8>>, params: ContentParserParams) -> Self {
         Self {
             cursor,
-            info,
+            params,
             state: ContentParserState {},
         }
     }
@@ -67,7 +69,7 @@ impl<'s> ContentParser<'s> {
                         break;
                     }
                 },
-                | Err(_) => break,
+                | Err(_) => continue,
             }
 
             buf = buf.trim().to_owned();
@@ -86,27 +88,45 @@ impl<'s> ContentParser<'s> {
         Ok(todos)
     }
 
+
+    // |01234567 // TODO!(a, b, c): test
+    //  ^        ^        ^      ^
+    //  0        9        18     25
+
     fn parse_buf(&mut self, line: u32, buf: &str) -> Result<Option<ToDoItem>, Box<dyn Error>> {
-        if let Some(start_idx) = buf.find(&self.info.todo_start_str_combined) {
-            let p_error = ParserError::new(&format!("failed to parse line {} in file {}", line, self.info.file));
+        if let Some(start_idx) = buf.find(&self.params.start_literal) {
+            let p_error = ParserError::new(&format!("failed to parse line {} in file {}", line, self.params.file));
             let sub_buf = &buf[start_idx..];
-            if sub_buf.len() < MIN_TODO_LEN {
+            if sub_buf.len() < self.params.min_todo_length { 
                 return Err(Box::new(p_error.clone()));
             }
-            let p_start_idx = TODO_START_STR.len() + TODO_PARAMS_PARANTHESES_START.len() - 1;
-            let p_close_idx = sub_buf
-                .find(TODO_PARAMS_PARANTHESES_END)
-                .ok_or(Box::new(p_error.clone()))?;
-            let parameters = &mut sub_buf[p_start_idx + 1..p_close_idx].split(TODO_PARAMS_SEPARATOR);
+            let params_start_idx = self.params.start_literal.len(); // index of first char of params
+            let params_close_idx = sub_buf[params_start_idx..]
+                .find(&self.params.end_literal)
+                .ok_or(Box::new(p_error.clone()))? + params_start_idx;
+            let parameters = &mut sub_buf[params_start_idx..params_close_idx].split(C_TODO_PARAM_SEPARATOR);
             let prio = parameters.next().ok_or(Box::new(p_error.clone()))?.trim();
             let assignee = parameters.next().ok_or(Box::new(p_error.clone()))?.trim();
-            let content = sub_buf[p_close_idx + 1..].trim();
+            let next_lines = parameters.next().ok_or(Box::new(p_error.clone()))?.trim();
+            let next_lines_nr = next_lines.parse::<usize>()?;
+            let content = sub_buf[params_close_idx + &self.params.end_literal.len()..].trim();
+            let mut context = Vec::<String>::new();
+            for _ in 0..next_lines_nr {
+                let mut line_buf = String::new();
+                if let Ok(size) = self.cursor.read_line(&mut line_buf) {
+                    if size <= 0 {
+                        break;
+                    }
+                    context.push(line_buf);
+                }
+            }
 
             Ok(Some(ToDoItem {
                 priority: prio.to_owned(),
                 body: content.to_owned(),
                 assignee: assignee.to_owned(),
-                file: self.info.file.to_owned(),
+                context,
+                file: self.params.file.to_owned(),
                 line,
             }))
         } else {
@@ -120,17 +140,14 @@ struct ToDoItem {
     priority: String,
     body: String,
     assignee: String,
+    context: Vec<String>,
     file: String,
     line: u32,
 }
 
-// TODO!(1, haw): make these modifiable per commandline
-const TODO_START_STR: &'static str = "// TODO!";
-const TODO_PARAMS_PARANTHESES_START: &'static str = "(";
-const TODO_PARAMS_PARANTHESES_END: &'static str = "):";
-const TODO_PARAMS_SEPARATOR: &'static str = ",";
-const MIN_TODO_LEN: usize =
-    TODO_START_STR.len() + TODO_PARAMS_PARANTHESES_START.len() + TODO_PARAMS_PARANTHESES_END.len() + 2;
+// TODO!(min,haw,2): make these modifiable, maybe?
+const C_TODO_PARAM_SEPARATOR: &str = ",";
+const C_TODO_PARAM_COUNT: usize = 3;
 
 struct Crawler<'s> {
     matcher: &'s Regex,
@@ -157,7 +174,7 @@ impl<'s> Crawler<'s> {
     }
 }
 
-fn collect(path: String, filter: String, workers: usize) -> Result<(), Box<dyn Error>> {
+fn collect(path: String, filter: String, workers: usize, start_literal: String, end_literal: String) -> Result<(), Box<dyn Error>> {
     let (sender_crawler, receiver_crawler) = unbounded();
 
     // fire and forget thread
@@ -171,21 +188,22 @@ fn collect(path: String, filter: String, workers: usize) -> Result<(), Box<dyn E
     let (sender_parser, receiver_parser) = unbounded();
 
     let pool = ThreadPool::new(workers);
+    let min_todo_length = start_literal.len() + C_TODO_PARAM_COUNT + (C_TODO_PARAM_SEPARATOR.len()*C_TODO_PARAM_COUNT-1) + end_literal.len();
 
     for s in receiver_crawler.iter() {
         let thread_wg = wg.clone();
         let thread_sender = sender_parser.clone();
+        let thread_start_literal = start_literal.clone();
+        let thread_end_literal = end_literal.clone();
         pool.execute(move || {
             let dothis = move || -> Result<(), Box<dyn Error>> {
-                // TODO!(1, haw): Move this into shared content parser arguments
-                let mut todo_start_str_combined = String::new();
-                todo_start_str_combined.push_str(TODO_START_STR);
-                todo_start_str_combined.push_str(TODO_PARAMS_PARANTHESES_START);
                 let content = fs::read(&s)?;
                 let mut cursor = Cursor::new(content);
                 let mut parser = ContentParser::new(&mut cursor, ContentParserParams {
                     file: s,
-                    todo_start_str_combined,
+                    start_literal: thread_start_literal,
+                    end_literal: thread_end_literal,
+                    min_todo_length,
                 });
                 let todos = parser.parse()?;
                 for t in todos {
@@ -220,8 +238,8 @@ fn collect(path: String, filter: String, workers: usize) -> Result<(), Box<dyn E
 fn main() -> Result<(), Box<dyn Error>> {
     let args = ClapArgumentLoader::load()?;
     match args.command {
-        | Command::Collect { path, filter, workers } => {
-            collect(path, filter, workers)?;
+        | Command::Collect { path, filter, workers, start_literal, end_literal } => {
+            collect(path, filter, workers, start_literal, end_literal)?;
             Ok(())
         },
     }

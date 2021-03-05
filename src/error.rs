@@ -24,4 +24,5 @@ macro_rules! make_error {
 }
 
 make_error!(UnknownCommandError);
+make_error!(ArgumentError);
 make_error!(ParserError);
