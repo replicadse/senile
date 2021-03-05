@@ -29,6 +29,7 @@ It will output a json formatted string to `STDOUT` as follows:\
       "prio": "$priority",
       "assignee": "$assignee",
       "body": "$todo_body",
+      "context": "$context_lines",
       "file": "$fq_relative_file_path",
       "line": $line
     },
@@ -37,4 +38,4 @@ It will output a json formatted string to `STDOUT` as follows:\
 }
 ```
 
-In order for `senile` to understand your todo statements, the format is fixed (subject to change) to the following: `// TODO!($prio, $assignee): $todo_body`
+In order for `senile` to understand your todo statements, the format is fixed (subject to change) to the following: `// TODO!($prio, $assignee, $context_lines): $todo_body`
