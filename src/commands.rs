@@ -1,5 +1,4 @@
 use std::{
-    collections::BTreeMap,
     error::Error,
     fs,
     io::{
@@ -92,13 +91,13 @@ pub fn collect(
     }
     crawler_thread.join().expect("the crawler thread has panicked");
 
-    let mut all_todos = BTreeMap::<String, Vec<ToDoItem>>::new();
-    drop(sender_parser); // drop orginal sender_parser to eliminate the +1 original copy from
-                         // num_threads+1
+    let mut all_todos = Vec::<ToDoItem>::new();
+    // drop orginal sender_parser to eliminate the +1 original copy from num_workers + 1 (original)
+    drop(sender_parser); 
     for todo in receiver_parser {
-        all_todos.entry(todo.priority.to_owned()).or_insert(Vec::new());
-        all_todos.get_mut(&todo.priority).unwrap().push(todo);
+        all_todos.push(todo);
     }
+    all_todos.sort_by(|a, b| a.priority.cmp(&b.priority));
     wg.wait();
 
     // let output = serde_json::to_vec_pretty(&all_todos)?;
