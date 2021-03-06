@@ -10,8 +10,3 @@
 
 Please visit the [wiki](https://replicadse.github.io/senile) for detailed information.
 
-
-<!-- cargo-sync-readme start -->
-
-
-<!-- cargo-sync-readme end -->
