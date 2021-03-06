@@ -92,8 +92,9 @@ pub fn collect(
     crawler_thread.join().expect("the crawler thread has panicked");
 
     let mut all_todos = Vec::<ToDoItem>::new();
-    // drop orginal sender_parser to eliminate the +1 original copy from num_workers + 1 (original)
-    drop(sender_parser); 
+    // drop orginal sender_parser to eliminate the +1 original copy from num_workers
+    // + 1 (original)
+    drop(sender_parser);
     for todo in receiver_parser {
         all_todos.push(todo);
     }

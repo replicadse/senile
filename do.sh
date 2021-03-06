@@ -10,7 +10,7 @@ case $1 in
         mv Cargo.toml.tmp Cargo.toml
         ;;
 
-    init)
+    install-hooks)
         # install hooks
         rm -rf .git/hooks
         ln -s ../scripts/git-hooks .git/hooks
