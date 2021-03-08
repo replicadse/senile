@@ -34,6 +34,10 @@ jobs:
           submodules: true
       - name: install
         run: sudo apt-get install build-essential && cargo install mdbook --version=0.4.7
+      - name: prepare
+        run: |
+          cargo install senile
+          senile collect -f="(\.rs)$" -p . | ./docs/wiki/src/todos.py >> ./docs/wiki/src/todos/root.md
       - name: build
         working-directory: docs/wiki
         run: mdbook build
