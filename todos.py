@@ -21,8 +21,12 @@ for d in data:
     data_prio[d['priority']].append(d)
 
 def print_todo(d):
-    print('- prio:\t\t{}\n  assignee:\t{}\n  body:\t\t{}\n  context:\t{}\n  file:\t\t{}\n  line:\t\t{}'
-            .format(d['priority'], d['assignee'], d['body'], '\t\t'.join(d['context']).strip('\n').strip(), d['file'], d['line']))
+    print('- prio: {}\\'.format(d['priority']))
+    print('  assignee: {}\\'.format(d['assignee']))
+    print('  body: {}\\'.format(d['body']))
+    print('  context: \n\t```\n\t{}\n\t```'.format('\n\t'.join([l.strip().strip('\n') for l in d['context']])))
+    print('  file: {}\\'.format(d['file']))
+    print('  line: {}\\'.format(d['line']))
 
 for assignee in data_assignee.keys():
     print('### {}'.format(assignee))
