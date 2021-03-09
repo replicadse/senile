@@ -17,14 +17,6 @@ case $1 in
         chmod -R +x ./scripts/*
         ;;
 
-    cover)
-        export coverflags CARGO_INCREMENTAL=0 RUSTFLAGS="-Zprofile -Ccodegen-units=1 -Cinline-threshold=0 -Clink-dead-code -Coverflow-checks=off"
-        $coverflags cargo +nightly build
-        $coverflags cargo +nightly test
-        grcov ./target/debug/ -s . -t lcov --llvm --ignore-not-existing -o ./target/debug/coverage
-        genhtml -o ./target/debug/coverage-html --show-details --highlight ./target/debug/coverage
-        ;;
-
     scan)
         #cargo clippy --all-targets --all-features -- -D warnings
         cargo fmt --all -- --check
