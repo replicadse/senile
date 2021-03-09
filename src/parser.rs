@@ -11,21 +11,27 @@ use crate::{
     types::ToDoItem,
 };
 
-// TODO!(min,haw,2): make these modifiable, maybe?
+// TODO!(min,haw,1): make this modifiable, maybe?
 const C_TODO_PARAM_SEPARATOR: &str = ",";
 const C_TODO_PARAM_COUNT: usize = 3;
 
+/// Parameters for the parser.
 pub struct ContentParserParams {
+    /// The file (path) for todo item context.
     pub file: String,
+    /// The ToDo item start literal like '// TODO!('
     pub start_literal: String,
+    /// The ToDo item end literal like '):'
     pub end_literal: String,
 }
+/// The parser.
 pub struct ContentParser<'s> {
     cursor: &'s mut Cursor<Vec<u8>>,
     params: ContentParserParams,
     min_todo_length: usize,
 }
 impl<'s> ContentParser<'s> {
+    /// Creates a new parser struct with the given parameters.
     pub fn new(cursor: &'s mut Cursor<Vec<u8>>, params: ContentParserParams) -> Self {
         let min_todo_length = params.start_literal.len()
             + C_TODO_PARAM_COUNT
@@ -38,6 +44,8 @@ impl<'s> ContentParser<'s> {
         }
     }
 
+    /// Begins parsing the content.
+    /// Returns a result of a vector of found ToDo items.
     pub fn parse(&mut self) -> Result<Vec<ToDoItem>, Box<dyn Error>> {
         let mut todos = Vec::<ToDoItem>::new();
         let mut buf = String::new();

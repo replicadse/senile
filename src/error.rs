@@ -1,11 +1,13 @@
 macro_rules! make_error {
     ($name:ident) => {
         #[derive(Debug, Clone)]
+        /// An error type.
         pub struct $name {
             details: String,
         }
 
         impl $name {
+            /// Error type constructor.
             pub fn new(details: &str) -> Self {
                 Self {
                     details: details.to_owned(),

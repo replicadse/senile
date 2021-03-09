@@ -1,3 +1,7 @@
+#![deny(missing_docs)]
+
+//! senile
+
 use std::error::Error;
 
 mod args;

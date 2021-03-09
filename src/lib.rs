@@ -1,3 +1,4 @@
+#![deny(missing_docs)]
 //! senile
 //!
 //! MIT licensed
@@ -18,9 +19,15 @@
 //!
 //! For more information on pretty much everything, consider checking the wiki for it (https://replicadse.github.io/senile/).
 
+/// Responsible for parsing the arguments to commands.
 pub mod args;
+/// Declaration of all possible commands.
 pub mod commands;
+/// Responsible for crawling through a file/directory (tree).
 pub mod crawler;
+/// Error declarations.
 pub mod error;
+/// Responsible for parsing files (lines).
 pub mod parser;
+/// Declaration of basic types like the ToDo item itself.
 pub mod types;

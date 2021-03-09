@@ -9,12 +9,17 @@ use crate::error::{
 };
 
 #[derive(Debug)]
+/// Combined arguments struct for the invoked command incl. all necessary information.
 pub struct CallArgs {
+    /// The privilege with which the program was called.
     pub privilege: Privilege,
+    /// The subcommand that was called incl. all arguments and parameters.
     pub command: Command,
 }
 
 impl CallArgs {
+    /// Validating the arguments since some commands may only be called with certain privileges,
+    /// arguments being XOR or similar.
     pub fn validate(&self) -> Result<(), Box<dyn Error>> {
         match self.privilege {
             | Privilege::Normal => Ok(()),
@@ -24,25 +29,37 @@ impl CallArgs {
 }
 
 #[derive(Debug)]
+/// The privilege.
 pub enum Privilege {
+    /// Normal privileges identify the normal scenario.
     Normal,
+    /// Experimental privileges give access to unstable features.
     Experimental,
 }
 
 #[derive(Debug)]
+/// The (sub-)command representation for the call args.
 pub enum Command {
+    /// Collect subcommand representation.
     Collect {
+        /// The path from which to crawl.
         path: String,
+        /// The (regex) filter on files in the (sub-)tree below incl. `path`.
         filter: String,
+        /// The amount of worker(-thread)s.
         workers: usize,
+        /// The start literal of the ToDo items.
         start_literal: String,
+        /// The end literal of the ToDo items.
         end_literal: String,
     },
 }
 
+/// The type that parses the arguments to the program.
 pub struct ClapArgumentLoader {}
 
 impl ClapArgumentLoader {
+    /// Parsing the program arguments with the `clap` trait.
     pub fn load() -> Result<CallArgs, Box<dyn Error>> {
         let command = clap::App::new("senile")
             .version(env!("CARGO_PKG_VERSION"))
