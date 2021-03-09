@@ -6,9 +6,11 @@ use serde::{
 /// The typed todo item.
 #[derive(Debug, Serialize, Deserialize)]
 pub struct ToDoItem {
-    /// The free-text priority. Can be something like ['min', 'max', '0', '1'] or whatever.
+    /// The free-text priority. Can be something like ['min', 'max', '0', '1']
+    /// or whatever.
     pub priority: String,
-    /// Main body of the item. This is intended to contain the majority of the free text.
+    /// Main body of the item. This is intended to contain the majority of the
+    /// free text.
     pub body: String,
     /// Who this todo belongs to.
     pub assignee: String,

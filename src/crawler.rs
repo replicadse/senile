@@ -4,19 +4,21 @@ use crossbeam::channel::Sender;
 use fancy_regex::Regex;
 use walkdir::WalkDir;
 
-/// The crawler type that goes through a (sub-)tree of a file/directory (inode) and recursively
-/// gets files.
+/// The crawler type that goes through a (sub-)tree of a file/directory (inode)
+/// and recursively gets files.
 pub struct Crawler<'s> {
     matcher: &'s Regex,
 }
 impl<'s> Crawler<'s> {
     /// Constructor for the crawler.
-    /// Accepting the regex which shall match the (fully qualified, relative) file names.
+    /// Accepting the regex which shall match the (fully qualified, relative)
+    /// file names.
     pub fn new(matcher: &'s Regex) -> Self {
         Self { matcher }
     }
 
-    /// Executing the crawl, sending the results during the operation through the sender argument.
+    /// Executing the crawl, sending the results during the operation through
+    /// the sender argument.
     pub fn crawl(&self, path: &str, sender: Sender<String>) -> Result<(), Box<dyn Error>> {
         for entry in WalkDir::new(path)
             .into_iter()

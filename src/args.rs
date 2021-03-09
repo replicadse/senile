@@ -9,7 +9,8 @@ use crate::error::{
 };
 
 #[derive(Debug)]
-/// Combined arguments struct for the invoked command incl. all necessary information.
+/// Combined arguments struct for the invoked command incl. all necessary
+/// information.
 pub struct CallArgs {
     /// The privilege with which the program was called.
     pub privilege: Privilege,
@@ -18,8 +19,8 @@ pub struct CallArgs {
 }
 
 impl CallArgs {
-    /// Validating the arguments since some commands may only be called with certain privileges,
-    /// arguments being XOR or similar.
+    /// Validating the arguments since some commands may only be called with
+    /// certain privileges, arguments being XOR or similar.
     pub fn validate(&self) -> Result<(), Box<dyn Error>> {
         match self.privilege {
             | Privilege::Normal => Ok(()),
