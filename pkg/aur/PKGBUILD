@@ -31,5 +31,5 @@ check() {
 
 package() {
   #install -Dm755 target/release/$pkgname -t "$pkgdir/usr/bin"
-  cargo +nightly install $pkgname --no-track --all-features --version=$pkgver
+  cargo +nightly install $pkgname --no-track --all-features --version=$pkgver --force
 }
