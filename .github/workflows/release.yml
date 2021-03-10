@@ -98,14 +98,14 @@ jobs:
         chmod +x ./do.sh
         bash ./do.sh update-version ${{ steps.get_version.outputs.VERSION }}
     - name: publish
-        uses: KSXGitHub/github-actions-deploy-aur@2.2.3
-        with:
-          pkgname: senile
-          pkgbuild: ./pkg/aur/PKGBUILD
-          commit_username: replicadse
-          commit_email: haw@voidpointergroup.com
-          ssh_private_key: ${{ secrets.AUR_SSH_PK }}
-          commit_message: update AUR package
+      uses: KSXGitHub/github-actions-deploy-aur@2.2.3
+      with:
+        pkgname: senile
+        pkgbuild: ./pkg/aur/PKGBUILD
+        commit_username: replicadse
+        commit_email: haw@voidpointergroup.com
+        ssh_private_key: ${{ secrets.AUR_SSH_PK }}
+        commit_message: update AUR package
 
   publish:
     needs: tag
