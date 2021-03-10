@@ -26,7 +26,7 @@ def print_todo(d):
     print('  body: `{}`\\'.format(d['body']))
     print('  context: \n\t```\n\t{}\n\t```'.format('\n\t'.join([l.strip().strip('\n') for l in d['context']])))
     print('  file: `{}`\\'.format(d['file']))
-    print('  line: `{}`\\'.format(d['line']))
+    print('  line: `{}`'.format(d['line']))
 
 for assignee in data_assignee.keys():
     print('### {}'.format(assignee))

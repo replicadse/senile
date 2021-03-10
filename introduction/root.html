@@ -193,7 +193,9 @@ It will output a json formatted string to <code>STDOUT</code> as follows:</p>
       &quot;prio&quot;: &quot;$priority&quot;,
       &quot;assignee&quot;: &quot;$assignee&quot;,
       &quot;body&quot;: &quot;$todo_body&quot;,
-      &quot;context&quot;: &quot;$context_lines&quot;,
+      &quot;context&quot;: [
+        &quot;$context_lines&quot;
+      ],
       &quot;file&quot;: &quot;$fq_relative_file_path&quot;,
       &quot;line&quot;: $line
     },
