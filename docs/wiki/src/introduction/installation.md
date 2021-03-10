@@ -1,16 +1,19 @@
 # Installation via `cargo`
 
-## Install
 
-Find this project on [crates.io](https://crates.io/crates/senile).
-Install the software by executing:
-```
-cargo install senile
-```
+## The rust way
 
-## Update
-
-In order to update the version, simply run that command with the `--force` flag.
+In order to install or update, simply run the following command.
 ```
 cargo install senile --force
 ```
+Note that the `--force` flag is actually just necessary when updating.
+
+## The arch way
+
+Install the program from the Arch User Repository `AUR`. It is recommended to use the pacman wrapper `yay`.
+```
+yay -S senile
+```
+Note that this package will build the program locally (as cargo install does) so it depends on the `rust`+`rustup`+`cargo` packages being installed.
+
