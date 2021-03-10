@@ -140,7 +140,7 @@ jobs:
       run: |
         chmod +x ./do.sh && 
         bash ./do.sh update-version ${{ steps.get_version.outputs.VERSION }} && 
-        cargo build --release --locked --target ${{ matrix.target }}
+        cargo build --release --target ${{ matrix.target }}
     - name: zip
       run: cd ./target/${{ matrix.target }}/release && tar -zcvf ${{ matrix.target }}.tar.gz senile
     - name: upload asset
