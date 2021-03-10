@@ -30,7 +30,9 @@ It will output a json formatted string to `STDOUT` as follows:\
       "prio": "$priority",
       "assignee": "$assignee",
       "body": "$todo_body",
-      "context": "$context_lines",
+      "context": [
+        "$context_lines"
+      ],
       "file": "$fq_relative_file_path",
       "line": $line
     },
