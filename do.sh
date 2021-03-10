@@ -8,6 +8,8 @@ case $1 in
     update-version)
         sed 's/version = "0.0.0"/version = "'$2'"/g' Cargo.toml > Cargo.toml.tmp
         mv Cargo.toml.tmp Cargo.toml
+        sed 's/pkgver=0.0.0/pkgver='$2'/g' pkg/aur/PKGBUILD > pkg/aur/PKGBUILD.tmp
+        mv pkg/aur/PKGBUILD.tmp pkg/aur/PKGBUILD
         ;;
 
     install-hooks)

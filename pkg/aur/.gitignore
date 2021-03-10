@@ -1,0 +1,6 @@
+*.pkg.tar.zst
+.aur-repo
+.SRCINFO
+pkg
+src
+

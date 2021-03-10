@@ -78,6 +78,35 @@ jobs:
         cargo login ${{ secrets.CRATES_IO_TOKEN }} && 
         cargo publish --allow-dirty
 
+  publish-archlinux-aur:
+    needs: publish-cratesio
+    name: archlinux aur
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v1
+    - name: get version
+      id: get_version
+      run: echo ::set-output name=VERSION::$(git tag --points-at HEAD --sort -version:refname | head -1)
+    - name: install tools
+      run: |
+        rustup default nightly
+        rustup component add rustfmt
+        sudo apt-get install build-essential
+    - name: prepare
+      id: prepare
+      run: |
+        chmod +x ./do.sh
+        bash ./do.sh update-version ${{ steps.get_version.outputs.VERSION }}
+    - name: publish
+        uses: KSXGitHub/github-actions-deploy-aur@2.2.3
+        with:
+          pkgname: senile
+          pkgbuild: ./pkg/aur/PKGBUILD
+          commit_username: replicadse
+          commit_email: haw@voidpointergroup.com
+          ssh_private_key: ${{ secrets.AUR_SSH_PK }}
+          commit_message: update AUR package
+
   publish:
     needs: tag
     name: publish for ${{ matrix.os }}
@@ -111,7 +140,7 @@ jobs:
       run: |
         chmod +x ./do.sh && 
         bash ./do.sh update-version ${{ steps.get_version.outputs.VERSION }} && 
-        cargo build --release --target ${{ matrix.target }}
+        cargo build --release --locked --target ${{ matrix.target }}
     - name: zip
       run: cd ./target/${{ matrix.target }}/release && tar -zcvf ${{ matrix.target }}.tar.gz senile
     - name: upload asset

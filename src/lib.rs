@@ -17,7 +17,7 @@
 //! really wanted a nice-to-parse output format like JSON which is used right
 //! now as format for the `STDOUT` output.
 //!
-//! For more information on pretty much everything, consider checking the wiki for it (https://replicadse.github.io/senile/).
+//! For more information on pretty much everything, consider checking the wiki for it <https://replicadse.github.io/senile/>.
 
 /// Responsible for parsing the arguments to commands.
 pub mod args;
