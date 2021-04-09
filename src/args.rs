@@ -49,10 +49,8 @@ pub enum Command {
         filter: String,
         /// The amount of worker(-thread)s.
         workers: usize,
-        /// The start literal of the ToDo items.
-        start_literal: String,
-        /// The end literal of the ToDo items.
-        end_literal: String,
+        /// Tuples of start&end literals
+        literals: Vec<(String, String)>,
     },
 }
 
@@ -114,9 +112,9 @@ impl ClapArgumentLoader {
                         clap::Arg::with_name("format")
                             .long("format")
                             .value_name("FORMAT")
-                            .help("The format of the TODO statements in the source. Format separated with commas in the order \"start_literal\", \"end_literal\".")
+                            .help("The format of the TODO statements in the source. Format separated with commas in the order \"start_literal\", \"end_literal\". To allow more than one format, use this arg multiple times.")
                             .default_value("// TODO!(,):")
-                            .multiple(false)
+                            .multiple(true)
                             .required(false)
                             .takes_value(true)))
             .get_matches();
@@ -128,18 +126,20 @@ impl ClapArgumentLoader {
         };
 
         let cmd = if let Some(x) = command.subcommand_matches("collect") {
-            let format_arg = x.value_of("format").unwrap().split(",").collect::<Vec<&str>>();
-            if format_arg.len() != 2 {
-                return Err(Box::new(ArgumentError::new("invalid format")));
-            };
-            let start_literal = format_arg[0].to_owned();
-            let end_literal = format_arg[1].to_owned();
+            let formats = x.values_of("format").unwrap();
+            let mut literals = Vec::<(String, String)>::new();
+            for f in formats {
+                let format_arg = f.split(",").collect::<Vec<&str>>();
+                if format_arg.len() != 2 {
+                    return Err(Box::new(ArgumentError::new("invalid format")));
+                };
+                literals.push((format_arg[0].to_owned(), format_arg[1].to_owned()))
+            }
             Command::Collect {
                 path: x.value_of("path").unwrap().to_owned(), // should be covered by the clap arg being required
                 filter: x.value_of("filter").unwrap().to_owned(), // same as above
                 workers: x.value_of("workers").unwrap().parse::<usize>()?, // same as above
-                start_literal,
-                end_literal,
+                literals,
             }
         } else {
             return Err(Box::new(UnknownCommandError::new("unknown command")));

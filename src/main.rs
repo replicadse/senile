@@ -26,10 +26,9 @@ fn main() -> Result<(), Box<dyn Error>> {
             path,
             filter,
             workers,
-            start_literal,
-            end_literal,
+            literals,
         } => {
-            collect(path, filter, workers, start_literal, end_literal)?;
+            collect(path, filter, workers, literals)?;
             Ok(())
         },
     }

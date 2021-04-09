@@ -6,12 +6,14 @@ use std::{
     },
 };
 
+use fancy_regex::Regex;
+
 use crate::{
     error::ParserError,
     types::ToDoItem,
 };
 
-// TODO!(min,haw,1): make this modifiable, maybe?
+// TODO!(min,aw,1): make this modifiable, maybe?
 const C_TODO_PARAM_SEPARATOR: &str = ",";
 const C_TODO_PARAM_COUNT: usize = 3;
 
@@ -19,29 +21,36 @@ const C_TODO_PARAM_COUNT: usize = 3;
 pub struct ContentParserParams {
     /// The file (path) for todo item context.
     pub file: String,
-    /// The ToDo item start literal like '// TODO!('
-    pub start_literal: String,
-    /// The ToDo item end literal like '):'
-    pub end_literal: String,
+    /// The literals for finding the tokens.
+    pub literals: Vec<(String, String)>,
 }
 /// The parser.
 pub struct ContentParser<'s> {
     cursor: &'s mut Cursor<Vec<u8>>,
     params: ContentParserParams,
-    min_todo_length: usize,
+    exprs: Regex,
 }
 impl<'s> ContentParser<'s> {
     /// Creates a new parser struct with the given parameters.
-    pub fn new(cursor: &'s mut Cursor<Vec<u8>>, params: ContentParserParams) -> Self {
-        let min_todo_length = params.start_literal.len()
-            + C_TODO_PARAM_COUNT
-            + (C_TODO_PARAM_SEPARATOR.len() * C_TODO_PARAM_COUNT - 1)
-            + params.end_literal.len();
-        Self {
-            cursor,
-            params,
-            min_todo_length,
+    pub fn new(cursor: &'s mut Cursor<Vec<u8>>, params: ContentParserParams) -> Result<Self, Box<dyn Error>> {
+        let params_regex_str = &format!(".+{}", C_TODO_PARAM_SEPARATOR)
+            .repeat(C_TODO_PARAM_COUNT)
+            .trim_end_matches(C_TODO_PARAM_SEPARATOR)
+            .to_string();
+        let mut regex_parts = String::new();
+        for lit in &params.literals {
+            regex_parts.push_str("(");
+            let mut part = String::new();
+            part.push_str(&lit.0);
+            part.push_str(params_regex_str);
+            part.push_str(&lit.1);
+            part.push_str(".*");
+            regex_parts.push_str(&part);
+            regex_parts.push_str(")|");
         }
+        regex_parts = regex_parts.trim_end_matches("|").to_owned();
+        let exprs = Regex::new(&regex_parts)?;
+        Ok(Self { cursor, params, exprs })
     }
 
     /// Begins parsing the content.
@@ -81,44 +90,64 @@ impl<'s> ContentParser<'s> {
     //  0        9        18     25
 
     fn parse_buf(&mut self, line: u32, buf: &str) -> Result<Option<ToDoItem>, Box<dyn Error>> {
-        if let Some(start_idx) = buf.find(&self.params.start_literal) {
-            let p_error = ParserError::new(&format!("failed to parse line {} in file {}", line, self.params.file));
-            let sub_buf = &buf[start_idx..];
-            if sub_buf.len() < self.min_todo_length {
-                return Err(Box::new(p_error.clone()));
-            }
-            let params_start_idx = self.params.start_literal.len(); // index of first char of params
-            let params_close_idx = sub_buf[params_start_idx..]
-                .find(&self.params.end_literal)
-                .ok_or(Box::new(p_error.clone()))?
-                + params_start_idx;
-            let parameters = &mut sub_buf[params_start_idx..params_close_idx].split(C_TODO_PARAM_SEPARATOR);
-            let prio = parameters.next().ok_or(Box::new(p_error.clone()))?.trim();
-            let assignee = parameters.next().ok_or(Box::new(p_error.clone()))?.trim();
-            let next_lines = parameters.next().ok_or(Box::new(p_error.clone()))?.trim();
-            let next_lines_nr = next_lines.parse::<usize>()?;
-            let content = sub_buf[params_close_idx + &self.params.end_literal.len()..].trim();
-            let mut context = Vec::<String>::new();
-            for _ in 0..next_lines_nr {
-                let mut line_buf = String::new();
-                if let Ok(size) = self.cursor.read_line(&mut line_buf) {
-                    if size <= 0 {
-                        break;
+        if let Some(caps) = self.exprs.captures(buf)? {
+            for cap in caps.iter() {
+                if let Some(cap_some) = cap {
+                    let substr = &buf[cap_some.start()..cap_some.end()];
+                    match self.parse_stmt(line, substr) {
+                        | Ok(v) => return Ok(Some(v)),
+                        | Err(e) => return Err(e),
                     }
-                    context.push(line_buf);
                 }
             }
-
-            Ok(Some(ToDoItem {
-                priority: prio.to_owned(),
-                body: content.to_owned(),
-                assignee: assignee.to_owned(),
-                context,
-                file: self.params.file.to_owned(),
-                line,
-            }))
-        } else {
-            Ok(None)
         }
+        Ok(None)
+    }
+
+    fn parse_stmt(&mut self, line: u32, buf: &str) -> Result<ToDoItem, Box<dyn Error>> {
+        let p_error = ParserError::new(&format!("failed to parse line {} in file {}", line, self.params.file));
+        for match_pair in &self.params.literals {
+            if let Some(start_idx) = buf.find(&match_pair.0) {
+                let min_todo_length = match_pair.0.len()
+                    + C_TODO_PARAM_COUNT
+                    + (C_TODO_PARAM_SEPARATOR.len() * C_TODO_PARAM_COUNT - 1)
+                    + match_pair.1.len();
+                let sub_buf = &buf[start_idx..];
+                if sub_buf.len() < min_todo_length {
+                    return Err(Box::new(p_error.clone()));
+                }
+                let params_start_idx = match_pair.0.len(); // index of first char of params
+                let params_close_idx = sub_buf[params_start_idx..]
+                    .find(&match_pair.1)
+                    .ok_or(Box::new(p_error.clone()))?
+                    + params_start_idx;
+                let parameters = &mut sub_buf[params_start_idx..params_close_idx].split(C_TODO_PARAM_SEPARATOR);
+                let prio = parameters.next().ok_or(Box::new(p_error.clone()))?.trim();
+                let assignee = parameters.next().ok_or(Box::new(p_error.clone()))?.trim();
+                let next_lines = parameters.next().ok_or(Box::new(p_error.clone()))?.trim();
+                let next_lines_nr = next_lines.parse::<usize>()?;
+                let content = sub_buf[params_close_idx + &match_pair.1.len()..].trim();
+                let mut context = Vec::<String>::new();
+                for _ in 0..next_lines_nr {
+                    let mut line_buf = String::new();
+                    if let Ok(size) = self.cursor.read_line(&mut line_buf) {
+                        if size <= 0 {
+                            break;
+                        }
+                        context.push(line_buf);
+                    }
+                }
+
+                return Ok(ToDoItem {
+                    priority: prio.to_owned(),
+                    body: content.to_owned(),
+                    assignee: assignee.to_owned(),
+                    context,
+                    file: self.params.file.to_owned(),
+                    line,
+                });
+            }
+        }
+        Err(Box::new(p_error.clone()))
     }
 }

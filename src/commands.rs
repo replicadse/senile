@@ -48,8 +48,7 @@ pub fn collect(
     path: String,
     filter: String,
     workers: usize,
-    start_literal: String,
-    end_literal: String,
+    literals: Vec<(String, String)>,
 ) -> Result<(), Box<dyn Error>> {
     let (sender_crawler, receiver_crawler) = unbounded();
 
@@ -68,17 +67,16 @@ pub fn collect(
     for s in receiver_crawler.iter() {
         let thread_wg = wg.clone();
         let thread_sender = sender_parser.clone();
-        let thread_start_literal = start_literal.clone();
-        let thread_end_literal = end_literal.clone();
+        let thread_literals = literals.clone();
         pool.execute(move || {
             let dothis = move || -> Result<(), Box<dyn Error>> {
                 let content = fs::read(&s)?;
                 let mut cursor = Cursor::new(content);
                 let mut parser = ContentParser::new(&mut cursor, ContentParserParams {
                     file: s,
-                    start_literal: thread_start_literal,
-                    end_literal: thread_end_literal,
-                });
+                    literals: thread_literals,
+                })
+                .unwrap();
                 let todos = parser.parse()?;
                 for t in todos {
                     thread_sender.send(t)?;
