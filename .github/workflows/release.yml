@@ -20,8 +20,8 @@ jobs:
           features: ""
     steps:
     - uses: actions/checkout@v1
-    - name: install nightly
-      run: rustup default nightly
+    - name: install toolchain
+      run: rustup default stable
     - name: install tools
       run: sudo apt-get install build-essential
     - name: check formatting
@@ -90,7 +90,7 @@ jobs:
       run: echo ::set-output name=VERSION::$(git tag --points-at HEAD --sort -version:refname | head -1)
     - name: install tools
       run: |
-        rustup default nightly
+        rustup default stable
         rustup component add rustfmt
         sudo apt-get install build-essential
     - name: prepare
