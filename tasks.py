@@ -30,6 +30,7 @@ def task_ci_updateversion(c, version):
  
 
 ns = Collection()
+# TODO!(aw, min, 3): group these into a group?
 ns.add_task(task_build, 'build')
 ns.add_task(task_format, 'fmt')
 ns.add_task(task_scan, 'scan')

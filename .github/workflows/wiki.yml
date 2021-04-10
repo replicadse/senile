@@ -21,7 +21,7 @@ jobs:
       - name: prepare
         run: |
           cargo +stable install senile
-          senile collect -f="(\.rs)$" -p . | ./docs/wiki/src/todos.py >> ./docs/wiki/src/todos/root.md
+          senile collect -f="(\.rs|\.py)$" --format="// TODO!(,):" --format="# TODO!(,):" -p . | ./docs/wiki/src/todos.py >> ./docs/wiki/src/todos/root.md
       - name: build
         working-directory: docs/wiki
         run: mdbook build
