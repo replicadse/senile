@@ -89,11 +89,11 @@ jobs:
       run: |
         rustup default stable
         sudo apt-get install build-essential
+        pip install invoke
     - name: prepare
       id: prepare
       run: |
-        chmod +x ./do.sh
-        bash ./do.sh update-version ${{ steps.get_version.outputs.VERSION }}
+        invoke ci.update-version --version=${{ steps.get_version.outputs.VERSION }}
     - name: publish
       uses: KSXGitHub/github-actions-deploy-aur@v2.2.3
       with:
@@ -134,10 +134,10 @@ jobs:
         rustup default stable
         ${{ matrix.install }}
         rustup target install ${{ matrix.target }}
+        pip install invoke
     - name: build-${{ matrix.target }}
       run: |
-        chmod +x ./do.sh
-        bash ./do.sh update-version ${{ steps.get_version.outputs.VERSION }}
+        invoke ci.update-version --version=${{ steps.get_version.outputs.VERSION }}
         cargo build --release --target ${{ matrix.target }}
     - name: zip
       run: cd ./target/${{ matrix.target }}/release && tar -zcvf ${{ matrix.target }}.tar.gz senile
