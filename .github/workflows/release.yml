@@ -85,6 +85,9 @@ jobs:
     - name: get version
       id: get_version
       run: echo ::set-output name=VERSION::$(git tag --points-at HEAD --sort -version:refname | head -1)
+    - uses: actions/setup-python@v2
+      with:
+        python-version: '3.7'
     - name: install tools
       run: |
         rustup default stable
@@ -129,6 +132,9 @@ jobs:
     - name: get release data
       id: get_release_data
       run: echo ::set-output name=upload_url::$(cat RELEASE/${{ env.RELEASE_FILE }})
+    - uses: actions/setup-python@v2
+      with:
+        python-version: '3.7'
     - name: install tools
       run: |
         rustup default stable
