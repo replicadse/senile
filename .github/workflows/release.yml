@@ -24,10 +24,6 @@ jobs:
       run: rustup default stable
     - name: install tools
       run: sudo apt-get install build-essential
-    - name: check formatting
-      run: |
-        rustup component add rustfmt
-        cargo fmt --all -- --check
     - name: execute tests
       run: cargo test ${{ matrix.features }}
     - name: build program
@@ -71,6 +67,7 @@ jobs:
     - name: install tools
       run: |
         sudo apt-get install build-essential
+        rustup default stable
         pip install invoke
     - name: publish
       id: publish
@@ -91,7 +88,6 @@ jobs:
     - name: install tools
       run: |
         rustup default stable
-        rustup component add rustfmt
         sudo apt-get install build-essential
     - name: prepare
       id: prepare
@@ -135,12 +131,13 @@ jobs:
       run: echo ::set-output name=upload_url::$(cat RELEASE/${{ env.RELEASE_FILE }})
     - name: install tools
       run: |
-        ${{ matrix.install }} && 
+        rustup default stable
+        ${{ matrix.install }}
         rustup target install ${{ matrix.target }}
     - name: build-${{ matrix.target }}
       run: |
-        chmod +x ./do.sh && 
-        bash ./do.sh update-version ${{ steps.get_version.outputs.VERSION }} && 
+        chmod +x ./do.sh
+        bash ./do.sh update-version ${{ steps.get_version.outputs.VERSION }}
         cargo build --release --target ${{ matrix.target }}
     - name: zip
       run: cd ./target/${{ matrix.target }}/release && tar -zcvf ${{ matrix.target }}.tar.gz senile
