@@ -25,12 +25,12 @@ The `$context_lines_below` argument tells the tool how many lines it shall inclu
 
 ## `collect` command flags
 
-|Name|Short|Long|Description|Remark|Status|
-|-- |-- |-- |-- |-- |--|
-|Path|-p|--path|The path from which to start traversal.|None|stable|
-|Workers|-w|--workers|The amount of workers (threads) used when parsing the collected files.|None|stable|
-|Filter|-f|--filter|The regex for filtering the files that are to be parsed.|None|stable|
-|Format||--format|The format of the todo statements that are parsed. It is the start literal followed by the end literal, separated with a comma.|Example: `--format="// TODO\!(,):"`|stable|
+|Name|Short|Long|Description|Remark|Status|Multiple|
+|-- |-- |-- |-- |-- |--|-- |
+|Path|-p|--path|The path from which to start traversal.|None|stable|no|
+|Workers|-w|--workers|The amount of workers (threads) used when parsing the collected files.|None|stable|no|
+|Filter|-f|--filter|The regex for filtering the files that are to be parsed.|None|stable|no|
+|Format||--format|The format of the todo statements that are parsed. It is the start literal followed by the end literal, separated with a comma.|Example: `--format="// TODO\(,):"`|stable|yes|
 
 **Examples:**
 - Basic usage:\
@@ -41,4 +41,6 @@ The `$context_lines_below` argument tells the tool how many lines it shall inclu
 `senile collect -f="\.rs$"`
 - Specifying the todo statement format (`## TODO~[[min, myself, 0]]: ...content`):\
 `senile collect --format="## TODO~[[,]]:"`
+- Specifying more formats:
+`senile collect --format="// TODO!(,):" --format="## TODO~[[,]]:"
 
