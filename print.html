@@ -236,11 +236,11 @@ The <code>$context_lines_below</code> argument tells the tool how many lines it 
 <tr><td>collect</td><td>Collects the todo statements</td><td>stable</td></tr>
 </tbody></table>
 <h2 id="collect-command-flags"><a class="header" href="#collect-command-flags"><code>collect</code> command flags</a></h2>
-<table><thead><tr><th>Name</th><th>Short</th><th>Long</th><th>Description</th><th>Remark</th><th>Status</th></tr></thead><tbody>
-<tr><td>Path</td><td>-p</td><td>--path</td><td>The path from which to start traversal.</td><td>None</td><td>stable</td></tr>
-<tr><td>Workers</td><td>-w</td><td>--workers</td><td>The amount of workers (threads) used when parsing the collected files.</td><td>None</td><td>stable</td></tr>
-<tr><td>Filter</td><td>-f</td><td>--filter</td><td>The regex for filtering the files that are to be parsed.</td><td>None</td><td>stable</td></tr>
-<tr><td>Format</td><td></td><td>--format</td><td>The format of the todo statements that are parsed. It is the start literal followed by the end literal, separated with a comma.</td><td>Example: <code>--format=&quot;// TODO\!(,):&quot;</code></td><td>stable</td></tr>
+<table><thead><tr><th>Name</th><th>Short</th><th>Long</th><th>Description</th><th>Remark</th><th>Status</th><th>Multiple</th></tr></thead><tbody>
+<tr><td>Path</td><td>-p</td><td>--path</td><td>The path from which to start traversal.</td><td>None</td><td>stable</td><td>no</td></tr>
+<tr><td>Workers</td><td>-w</td><td>--workers</td><td>The amount of workers (threads) used when parsing the collected files.</td><td>None</td><td>stable</td><td>no</td></tr>
+<tr><td>Filter</td><td>-f</td><td>--filter</td><td>The regex for filtering the files that are to be parsed.</td><td>None</td><td>stable</td><td>no</td></tr>
+<tr><td>Format</td><td></td><td>--format</td><td>The format of the todo statements that are parsed. It is the start literal followed by the end literal, separated with a comma.</td><td>Example: <code>--format=&quot;// TODO\(,):&quot;</code></td><td>stable</td><td>yes</td></tr>
 </tbody></table>
 <p><strong>Examples:</strong></p>
 <ul>
@@ -252,6 +252,8 @@ The <code>$context_lines_below</code> argument tells the tool how many lines it 
 <code>senile collect -f=&quot;\.rs$&quot;</code></li>
 <li>Specifying the todo statement format (<code>## TODO~[[min, myself, 0]]: ...content</code>):<br />
 <code>senile collect --format=&quot;## TODO~[[,]]:&quot;</code></li>
+<li>Specifying more formats:
+`senile collect --format=&quot;// TODO!(,):&quot; --format=&quot;## TODO~[[,]]:&quot;</li>
 </ul>
 <h1 id="architecture-decision-records"><a class="header" href="#architecture-decision-records">Architecture Decision Records</a></h1>
 <p>are designed to keep track of decisions that affect the development process and the product.</p>
