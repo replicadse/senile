@@ -41,6 +41,5 @@ The `$context_lines_below` argument tells the tool how many lines it shall inclu
 `senile collect -f="\.rs$"`
 - Specifying the todo statement format (`## TODO~[[min, myself, 0]]: ...content`):\
 `senile collect --format="## TODO~[[,]]:"`
-- Specifying more formats:
-`senile collect --format="// TODO!(,):" --format="## TODO~[[,]]:"
-
+- Specifying more formats:\
+`senile collect --format="// TODO!(,):" --format="## TODO~[[,]]:"`
