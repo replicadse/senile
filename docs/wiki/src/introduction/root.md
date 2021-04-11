@@ -24,21 +24,19 @@ Your are senile because you can not remember all the ToDos that you have in your
 `senile` collects all todo statements recursively from the given directory/file (tree). It collects information about the todo body, the priority, the file and the line in that file.\
 It will output a json formatted string to `STDOUT` as follows:\
 ```json
-{
-  "$priority": [
-    {
-      "prio": "$priority",
-      "assignee": "$assignee",
-      "body": "$todo_body",
-      "context": [
-        "$context_lines"
-      ],
-      "file": "$fq_relative_file_path",
-      "line": $line
-    },
-    ...
-  ]
-}
-```
-
-In order for `senile` to understand your todo statements, the format is fixed (subject to change) to the following: `// TODO!($prio, $assignee, $context_lines): $todo_body`
+[
+  {
+    "prio": "$priority",
+    "assignee": "$assignee",
+    "body": "$todo_body",
+    "context": [
+      "$context_line",
+      "$context_line",
+      ...
+    ],
+    "file": "$fq_relative_file_path",
+    "line": $line
+  },
+  ...
+]
+Note that these entries are string-sorted by their assigned priority.
