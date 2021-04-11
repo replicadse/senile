@@ -189,23 +189,23 @@
 <h2 id="jokes-aside-how-does-it-work"><a class="header" href="#jokes-aside-how-does-it-work">Jokes aside, how does it work?</a></h2>
 <p><code>senile</code> collects all todo statements recursively from the given directory/file (tree). It collects information about the todo body, the priority, the file and the line in that file.<br />
 It will output a json formatted string to <code>STDOUT</code> as follows:</p>
-<pre><code class="language-json">{
-  &quot;$priority&quot;: [
-    {
-      &quot;prio&quot;: &quot;$priority&quot;,
-      &quot;assignee&quot;: &quot;$assignee&quot;,
-      &quot;body&quot;: &quot;$todo_body&quot;,
-      &quot;context&quot;: [
-        &quot;$context_lines&quot;
-      ],
-      &quot;file&quot;: &quot;$fq_relative_file_path&quot;,
-      &quot;line&quot;: $line
-    },
-    ...
-  ]
-}
+<pre><code class="language-json">[
+  {
+    &quot;prio&quot;: &quot;$priority&quot;,
+    &quot;assignee&quot;: &quot;$assignee&quot;,
+    &quot;body&quot;: &quot;$todo_body&quot;,
+    &quot;context&quot;: [
+      &quot;$context_line&quot;,
+      &quot;$context_line&quot;,
+      ...
+    ],
+    &quot;file&quot;: &quot;$fq_relative_file_path&quot;,
+    &quot;line&quot;: $line
+  },
+  ...
+]
 </code></pre>
-<p>In order for <code>senile</code> to understand your todo statements, the format is fixed (subject to change) to the following: <code>// TODO!($prio, $assignee, $context_lines): $todo_body</code></p>
+<p>Note that these entries are string-sorted by their assigned priority.</p>
 <h1 id="installation-via-cargo"><a class="header" href="#installation-via-cargo">Installation via <code>cargo</code></a></h1>
 <h2 id="the-rust-way"><a class="header" href="#the-rust-way">The rust way</a></h2>
 <p>In order to install or update, simply run the following command.</p>
