@@ -39,4 +39,5 @@ It will output a json formatted string to `STDOUT` as follows:\
   },
   ...
 ]
+```
 Note that these entries are string-sorted by their assigned priority.
