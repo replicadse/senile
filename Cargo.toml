@@ -28,5 +28,5 @@ serde_json = "1.0.45"
 fancy-regex = "0.5.0"
 crossbeam = "0.8.0"
 threadpool = "1.8.1"
-aquamarine = "0.1.5"
+aquamarine = "0.1"
 
