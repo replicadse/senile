@@ -1,18 +1,22 @@
 from invoke import task, Collection 
 
 @task
-def task_build(c, release=False):
+def task_x_exec(c, command):
+    c.run(command)
+
+@task
+def task_x_build(c, release=False):
     flags = []
     if release:
         flags.append('--release')
     c.run('cargo build ' + ' '.join(flags))
 
 @task
-def task_format(c):
+def task_x_format(c):
     c.run('cargo fmt --all')
 
 @task
-def task_scan(c):
+def task_x_scan(c):
     c.run('cargo fmt --all -- --check')
 
 @task
@@ -31,9 +35,13 @@ def task_ci_updateversion(c, version):
 
 ns = Collection()
 # TODO!(min, aw, 3): group these into a group?
-ns.add_task(task_build, 'build')
-ns.add_task(task_format, 'fmt')
-ns.add_task(task_scan, 'scan')
+
+ns_x = Collection('x')
+ns_x.add_task(task_x_exec, 'exec')
+ns_x.add_task(task_x_build, 'build')
+ns_x.add_task(task_x_format, 'fmt')
+ns_x.add_task(task_x_scan, 'scan')
+ns.add_collection(ns_x, 'x')
 
 ns_other = Collection('other')
 ns_other.add_task(task_other_installhooks, 'install-hooks')
