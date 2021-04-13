@@ -12,6 +12,8 @@ env:
 jobs:
   check:
     name: check (${{ matrix.name }})
+    env:
+      working-directory: ./senile
     runs-on: ubuntu-latest
     strategy:
       matrix:
@@ -25,8 +27,10 @@ jobs:
     - name: install tools
       run: sudo apt-get install build-essential
     - name: execute tests
+      working-directory: ${{ env.working-directory }}
       run: cargo test ${{ matrix.features }}
     - name: build program
+      working-directory: ${{ env.working-directory }}
       run: cargo build ${{ matrix.features }}
   
   tag:
@@ -37,7 +41,6 @@ jobs:
     steps:
     - uses: actions/checkout@v1
     - name: create release
-      id: create_release
       uses: actions/create-release@latest
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -58,11 +61,12 @@ jobs:
   publish-cratesio:
     needs: tag
     name: crates.io
+    env:
+      working-directory: ./senile
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v1
     - name: get version
-      id: get_version
       run: echo ::set-output name=VERSION::$(git tag --points-at HEAD --sort -version:refname | head -1)
     - name: install tools
       run: |
@@ -70,7 +74,7 @@ jobs:
         rustup default stable
         pip install invoke
     - name: publish
-      id: publish
+      working-directory: ${{ env.working-directory }}
       run: |
         invoke ci.update-version --version=${{ steps.get_version.outputs.VERSION }}
         cargo login ${{ secrets.CRATES_IO_TOKEN }}
@@ -79,11 +83,12 @@ jobs:
   publish-archlinux-aur:
     needs: publish-cratesio
     name: archlinux aur
+    env:
+      working-directory: ./senile
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v1
     - name: get version
-      id: get_version
       run: echo ::set-output name=VERSION::$(git tag --points-at HEAD --sort -version:refname | head -1)
     - uses: actions/setup-python@v2
       with:
@@ -94,7 +99,7 @@ jobs:
         sudo apt-get install build-essential
         pip install invoke
     - name: prepare
-      id: prepare
+      working-directory: ./senile
       run: |
         invoke ci.update-version --version=${{ steps.get_version.outputs.VERSION }}
     - name: publish
@@ -110,6 +115,8 @@ jobs:
   publish:
     needs: tag
     name: publish for ${{ matrix.os }}
+    env:
+      working-directory: ./senile
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
@@ -123,14 +130,12 @@ jobs:
     steps:
     - uses: actions/checkout@v1
     - name: get version
-      id: get_version
       run: echo ::set-output name=VERSION::$(git tag --points-at HEAD --sort -version:refname | head -1)
     - name: download release id
       uses: actions/download-artifact@v1.0.0
       with:
         name: RELEASE
     - name: get release data
-      id: get_release_data
       run: echo ::set-output name=upload_url::$(cat RELEASE/${{ env.RELEASE_FILE }})
     - uses: actions/setup-python@v2
       with:
@@ -142,16 +147,18 @@ jobs:
         rustup target install ${{ matrix.target }}
         pip install invoke
     - name: build-${{ matrix.target }}
+      working-directory: ./senile
       run: |
         invoke ci.update-version --version=${{ steps.get_version.outputs.VERSION }}
         cargo build --release --target ${{ matrix.target }}
     - name: zip
+      working-directory: ./senile
       run: cd ./target/${{ matrix.target }}/release && tar -zcvf ${{ matrix.target }}.tar.gz senile
     - name: upload asset
       uses: svenstaro/upload-release-action@v1-release
       with:
         repo_token: ${{ secrets.GITHUB_TOKEN }}
-        file: ./target/${{ matrix.target }}/release/${{ matrix.target }}.tar.gz
+        file: ${{ env.working-directory }}/target/${{ matrix.target }}/release/${{ matrix.target }}.tar.gz
         asset_name: ${{ matrix.target }}.tar.gz
         tag: ${{ steps.get_version.outputs.VERSION }}
         overwrite: true

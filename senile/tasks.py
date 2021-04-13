@@ -20,12 +20,6 @@ def task_x_scan(c):
     c.run('cargo fmt --all -- --check')
 
 @task
-def task_other_installhooks(c):
-    c.run('rm -rf .git/hooks')
-    c.run('ln -s ./scripts/git-hooks .git/hooks')
-    c.run('chmod -R +x ./scripts/*')
-
-@task
 def task_ci_updateversion(c, version):
     c.run(f'''sed 's/version = "0.0.0"/version = "'{version}'"/g' Cargo.toml > Cargo.toml.tmp''')
     c.run('mv Cargo.toml.tmp Cargo.toml')
@@ -42,10 +36,6 @@ ns_x.add_task(task_x_build, 'build')
 ns_x.add_task(task_x_format, 'fmt')
 ns_x.add_task(task_x_scan, 'scan')
 ns.add_collection(ns_x, 'x')
-
-ns_other = Collection('other')
-ns_other.add_task(task_other_installhooks, 'install-hooks')
-ns.add_collection(ns_other, 'other')
 
 ns_ci = Collection('ci')
 ns_ci.add_task(task_ci_updateversion, 'update-version')
