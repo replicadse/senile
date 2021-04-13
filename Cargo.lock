@@ -22,9 +22,9 @@ dependencies = [
 
 [[package]]
 name = "aquamarine"
-version = "0.1.6"
+version = "0.1.8"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "1914c0092262836f4cb03dafe4a828c556ef422e56e265aae3ad3f3e271944b9"
+checksum = "22b1adc0005f76e7f801e34de82ab4685de2d7019343ac3c03b4e08e8d639097"
 dependencies = [
  "itertools",
  "proc-macro-error",

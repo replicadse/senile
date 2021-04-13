@@ -21,12 +21,12 @@ categories = ["command-line-utilities"]
     opt-level = 3
 
 [dependencies]
-clap = "2.33.0"
-walkdir = "2.3.1"
-serde = { version = "1.0.104", features = ["derive"] }
-serde_json = "1.0.45"
-fancy-regex = "0.5.0"
-crossbeam = "0.8.0"
-threadpool = "1.8.1"
-aquamarine = "0.1"
+clap = "^2.33.0"
+walkdir = "^2.3.1"
+serde = { version = "^1.0.104", features = ["derive"] }
+serde_json = "^1.0.45"
+fancy-regex = "^0.5.0"
+crossbeam = "^0.8.0"
+threadpool = "^1.8.1"
+aquamarine = "^0.1.8"
 
