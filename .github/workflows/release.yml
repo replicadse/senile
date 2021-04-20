@@ -68,8 +68,8 @@ jobs:
       id: publish
       run: |
         printf ${{ secrets.DOCKERHUB }} | docker login --username replicadse --password-stdin
-        docker build -t senile:latest -f docker/Dockerfile .
-        docker push senile:latest
+        docker build -t replicadse/senile:latest -f docker/Dockerfile .
+        docker push replicadse/senile:latest
 
   publish-cratesio:
     needs: tag
