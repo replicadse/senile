@@ -217,6 +217,14 @@ It will output a json formatted string to <code>STDOUT</code> as follows:</p>
 <pre><code>yay -S senile
 </code></pre>
 <p>Note that this package will build the program locally (as cargo install does) so it depends on the <code>rust</code>+<code>rustup</code>+<code>cargo</code> packages being installed.</p>
+<h2 id="the-docker-way"><a class="header" href="#the-docker-way">The docker way</a></h2>
+<p>You can also install the program by utilizing docker.</p>
+<pre><code>docker pull senile
+</code></pre>
+<p>Note that the docker syntax to execute the program with a custom entrypoint is somewhat alien. In order to successfully execute it, run it with this syntax:</p>
+<pre><code>docker run senile -v $HOST_PATH:/app/targets/$FOLDER:ro --entrypoint=&quot;/bin/senile&quot; senile collect -p=/app/targets --format=&quot;// TODO!(,):&quot; [...]
+</code></pre>
+<p>You essentially need to specify <code>/bin/senile</code> as custom entrypoint and add all the args <em>after</em> specifying the image which is to be run.</p>
 <h1 id="security-policy"><a class="header" href="#security-policy">Security Policy</a></h1>
 <p>The security police ist hosted as <a href="https://github.com/replicadse/senile/blob/master/SECURITY.md">file on GitHub</a>.</p>
 <h1 id="reference"><a class="header" href="#reference">Reference</a></h1>
@@ -295,12 +303,12 @@ line: <code>15</code></li>
 assignee: <code>aw</code><br />
 body: <code>group these into a group?</code><br />
 context: 
-<pre><code>ns.add_task(task_build, 'build')
-ns.add_task(task_format, 'fmt')
-ns.add_task(task_scan, 'scan')
+<pre><code>
+ns_x = Collection('x')
+ns_x.add_task(task_x_exec, 'exec')
 </code></pre>
 file: <code>./tasks.py</code><br />
-line: <code>32</code></li>
+line: <code>36</code></li>
 </ul>
 
                     </main>
