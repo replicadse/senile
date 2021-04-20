@@ -70,8 +70,6 @@ jobs:
         printf ${{ secrets.DOCKERHUB }} | docker login --username replicadse --password-stdin
         docker build -t senile:latest -f docker/Dockerfile .
         docker push senile:latest
-        docker build -t senile:${{ steps.get_version.outputs.VERSION }}
-        docker push senile:${{ steps.get_version.outputs.VERSION }}
 
   publish-cratesio:
     needs: tag
