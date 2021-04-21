@@ -25,7 +25,7 @@ docker pull senile
 ```
 Note that the docker syntax to execute the program with a custom entrypoint is somewhat alien. In order to successfully execute it, run it with this syntax:
 ```
-docker run senile -v $HOST_PATH:/app/targets/$FOLDER:ro --entrypoint="/bin/senile" senile collect -p=/app/targets --format="// TODO!(,):" [...]
+docker run --rm  -v $HOST_PATH:/app/targets/$FOLDER:ro --entrypoint="/bin/senile" senile collect -p=/app/targets --format="// TODO!(,):" [...]
 ```
 You essentially need to specify `/bin/senile` as custom entrypoint and add all the args _after_ specifying the image which is to be run.
 
