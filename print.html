@@ -222,7 +222,7 @@ It will output a json formatted string to <code>STDOUT</code> as follows:</p>
 <pre><code>docker pull senile
 </code></pre>
 <p>Note that the docker syntax to execute the program with a custom entrypoint is somewhat alien. In order to successfully execute it, run it with this syntax:</p>
-<pre><code>docker run senile -v $HOST_PATH:/app/targets/$FOLDER:ro --entrypoint=&quot;/bin/senile&quot; senile collect -p=/app/targets --format=&quot;// TODO!(,):&quot; [...]
+<pre><code>docker run --rm  -v $HOST_PATH:/app/targets/$FOLDER:ro --entrypoint=&quot;/bin/senile&quot; senile collect -p=/app/targets --format=&quot;// TODO!(,):&quot; [...]
 </code></pre>
 <p>You essentially need to specify <code>/bin/senile</code> as custom entrypoint and add all the args <em>after</em> specifying the image which is to be run.</p>
 <h1 id="security-policy"><a class="header" href="#security-policy">Security Policy</a></h1>
