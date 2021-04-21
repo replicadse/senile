@@ -9,7 +9,8 @@
 [![docs.rs](https://img.shields.io/badge/docs.rs:crate-latest-blue)](https://docs.rs/crate/senile/latest)
 [![docs.rs](https://img.shields.io/badge/docs.rs:docs-latest-blue)](https://docs.rs/senile/latest/senile/)
 [![website](https://img.shields.io/badge/home-GitHub-blue)](https://github.com/replicadse/senile)
-[![website](https://img.shields.io/badge/website-GitHub-blue)](https://replicadse.github.io/senile)
+[![website](https://img.shields.io/badge/website-GitHub-blue)](https://replicadse.github.io/senile)\
+
 ## What is senile?
 
 Your are senile because you can not remember all the ToDos that you have in your code. So in fact you are obviously unable to keep track of them. That is what senile is for.
