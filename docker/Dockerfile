@@ -18,7 +18,6 @@ RUN apk add \
   gcc \
   rustup
 
-# set nightly as deafult
 ENV PATH=/root/.cargo/bin:"$PATH"
 RUN rustup-init -y
 RUN rustup default stable
