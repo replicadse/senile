@@ -55,24 +55,6 @@ jobs:
         name: RELEASE
         path: ${{ env.RELEASE_FILE }}
 
-  publish-dockerhub:
-    needs: tag
-    name: dockerhub
-    runs-on: ubuntu-latest
-    steps:
-    - uses: actions/checkout@v1
-    - name: get version
-      id: get_version
-      run: echo ::set-output name=VERSION::$(git tag --points-at HEAD --sort -version:refname | head -1)
-    - name: publish
-      id: publish
-      run: |
-        printf ${{ secrets.DOCKERHUB }} | docker login --username replicadse --password-stdin
-        docker build -t replicadse/senile:latest -f docker/Dockerfile --build-arg VERSION=${{ steps.get_version.outputs.VERSION }} .
-        docker push replicadse/senile:latest
-        docker image tag replicadse/senile:latest replicadse/senile:${{ steps.get_version.outputs.VERSION }}
-        docker push replicadse/senile:${{ steps.get_version.outputs.VERSION }}
-
   publish-cratesio:
     needs: tag
     name: crates.io
@@ -93,6 +75,24 @@ jobs:
         invoke ci.update-version --version=${{ steps.get_version.outputs.VERSION }}
         cargo login ${{ secrets.CRATES_IO_TOKEN }}
         cargo publish --allow-dirty
+
+  publish-dockerhub:
+    needs: publish-cratesio
+    name: dockerhub
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v1
+    - name: get version
+      id: get_version
+      run: echo ::set-output name=VERSION::$(git tag --points-at HEAD --sort -version:refname | head -1)
+    - name: publish
+      id: publish
+      run: |
+        printf ${{ secrets.DOCKERHUB }} | docker login --username replicadse --password-stdin
+        docker build -t replicadse/senile:latest -f docker/Dockerfile --build-arg VERSION=${{ steps.get_version.outputs.VERSION }} .
+        docker push replicadse/senile:latest
+        docker image tag replicadse/senile:latest replicadse/senile:${{ steps.get_version.outputs.VERSION }}
+        docker push replicadse/senile:${{ steps.get_version.outputs.VERSION }}
 
   publish-archlinux-aur:
     needs: publish-cratesio
