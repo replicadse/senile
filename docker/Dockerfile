@@ -1,6 +1,8 @@
 FROM alpine:3.13 as build-env
 ENV LANG en_US.UTF-8
 
+ARG VERSION
+
 USER root
 RUN apk update && apk upgrade
 
@@ -21,7 +23,7 @@ RUN apk add \
 ENV PATH=/root/.cargo/bin:"$PATH"
 RUN rustup-init -y
 RUN rustup default stable
-RUN cargo +stable install senile
+RUN cargo +stable install senile --version=$VERSION
 
 FROM alpine:3.13 as runtime-env
 ENV LANG en_US.UTF-8

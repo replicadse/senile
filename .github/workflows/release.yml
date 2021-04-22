@@ -68,8 +68,10 @@ jobs:
       id: publish
       run: |
         printf ${{ secrets.DOCKERHUB }} | docker login --username replicadse --password-stdin
-        docker build -t replicadse/senile:latest -f docker/Dockerfile .
+        docker build -t replicadse/senile:latest -f docker/Dockerfile --build-arg VERSION=${{ steps.get_version.outputs.VERSION }} .
         docker push replicadse/senile:latest
+        docker image tag replicadse/senile:latest replicadse/senile:${{ steps.get_version.outputs.VERSION }}
+        docker push replicadse/senile:${{ steps.get_version.outputs.VERSION }}
 
   publish-cratesio:
     needs: tag
