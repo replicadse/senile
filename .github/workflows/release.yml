@@ -121,7 +121,7 @@ jobs:
         pkgname: senile
         pkgbuild: ./pkg/aur/PKGBUILD
         commit_username: replicadse
-        commit_email: haw@voidpointergroup.com
+        commit_email: aw@voidpointergroup.com
         ssh_private_key: ${{ secrets.AUR_SSH_PK }}
         commit_message: update AUR package
 
