@@ -33,4 +33,5 @@ COPY --from=build-env /root/.cargo/bin/senile /bin/senile
 RUN addgroup -g 1000 app && adduser -D -s /bin/sh -u 1000 -G app app
 USER app
 WORKDIR /app/targets
+
 ENTRYPOINT [ "/bin/senile" ]

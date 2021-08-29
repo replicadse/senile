@@ -1,4 +1,4 @@
-from invoke import task, Collection 
+from invoke import task, Collection
 
 @task
 def task_x_exec(c, command):
@@ -31,10 +31,8 @@ def task_ci_updateversion(c, version):
     c.run('mv Cargo.toml.tmp Cargo.toml')
     c.run(f'''sed 's/pkgver=0.0.0/pkgver='{version}'/g' pkg/aur/PKGBUILD > pkg/aur/PKGBUILD.tmp''')
     c.run('mv pkg/aur/PKGBUILD.tmp pkg/aur/PKGBUILD')
- 
 
 ns = Collection()
-# TODO!(min, aw, 3): group these into a group?
 
 ns_x = Collection('x')
 ns_x.add_task(task_x_exec, 'exec')
