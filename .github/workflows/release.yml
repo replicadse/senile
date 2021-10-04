@@ -116,7 +116,7 @@ jobs:
       run: |
         invoke ci.update-version --version=${{ steps.get_version.outputs.VERSION }}
     - name: publish
-      uses: KSXGitHub/github-actions-deploy-aur@v2.2.3
+      uses: KSXGitHub/github-actions-deploy-aur@v2.2.5
       with:
         pkgname: senile
         pkgbuild: ./pkg/aur/PKGBUILD
