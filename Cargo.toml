@@ -1,7 +1,7 @@
 [package]
 name = "senile"
 version = "0.0.0"
-authors = ["Heiko Alexander Weber <haw@voidpointergroup.com>"]
+authors = ["Alexander Weber <aw@voidpointergroup.com>"]
 edition = "2018"
 license = "MIT"
 description = "senile"
