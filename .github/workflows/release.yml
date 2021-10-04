@@ -27,7 +27,7 @@ jobs:
     - name: execute tests
       run: cargo test ${{ matrix.features }}
     - name: build program
-      run: cargo build --locked ${{ matrix.features }}
+      run: cargo build ${{ matrix.features }}
 
   tag:
     if: github.ref == 'refs/heads/master'
@@ -162,7 +162,7 @@ jobs:
     - name: build-${{ matrix.target }}
       run: |
         invoke ci.update-version --version=${{ steps.get_version.outputs.VERSION }}
-        cargo build --locked --release --target ${{ matrix.target }}
+        cargo build --release --target ${{ matrix.target }}
         cp ./target/${{ matrix.target }}/release/${{ matrix.target }} ./pkg/appimage/senile.AppImage/usr/bin/
         cd ./pkg/appimage && ARCH=${{ matrix.arch }} ../../appimagetool.AppImage ./senile.AppImage && cd ../../
     - name: upload asset
@@ -211,7 +211,7 @@ jobs:
     - name: build-${{ matrix.target }}
       run: |
         invoke ci.update-version --version=${{ steps.get_version.outputs.VERSION }}
-        cargo build --locked --release --target ${{ matrix.target }}
+        cargo build --release --target ${{ matrix.target }}
     - name: zip
       run: cd ./target/${{ matrix.target }}/release && tar -zcvf ${{ matrix.target }}.tar.gz senile
     - name: upload asset
