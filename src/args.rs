@@ -63,7 +63,7 @@ impl ClapArgumentLoader {
         let command = clap::App::new("senile")
             .version(env!("CARGO_PKG_VERSION"))
             .about("senile")
-            .author("Weber, Heiko Alexander <haw@voidpointergroup.com>")
+            .author("Weber, Alexander <aw@voidpointergroup.com>")
             .arg(
                 clap::Arg::with_name("experimental")
                     .short("e")

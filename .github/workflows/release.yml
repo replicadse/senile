@@ -28,7 +28,7 @@ jobs:
       run: cargo test ${{ matrix.features }}
     - name: build program
       run: cargo build ${{ matrix.features }}
-  
+
   tag:
     if: github.ref == 'refs/heads/master'
     needs: check
@@ -124,6 +124,55 @@ jobs:
         commit_email: aw@voidpointergroup.com
         ssh_private_key: ${{ secrets.AUR_SSH_PK }}
         commit_message: update AUR package
+
+publish-appimage:
+  needs: tag
+  name: publish appimage for ${{ matrix.os }}
+  runs-on: ${{ matrix.os }}
+  strategy:
+    matrix:
+      include:
+      - os: ubuntu-latest
+        target: x86_64-unknown-linux-gnu
+        arch: x86_64
+        install: apt-get install build-essential
+  steps:
+  - uses: actions/checkout@v1
+  - name: get version
+    id: get_version
+    run: echo ::set-output name=VERSION::$(git tag --points-at HEAD --sort -version:refname | head -1)
+  - name: download release id
+    uses: actions/download-artifact@v1.0.0
+    with:
+      name: RELEASE
+  - name: get release data
+    id: get_release_data
+    run: echo ::set-output name=upload_url::$(cat RELEASE/${{ env.RELEASE_FILE }})
+  - uses: actions/setup-python@v2
+    with:
+      python-version: '3.7'
+  - name: install tools
+    run: |
+      rustup default stable
+      ${{ matrix.install }}
+      rustup target install ${{ matrix.target }}
+      pip install invoke
+      wget -O appimagetool.AppImage https://github.com/AppImage/AppImageKit/releases/download/13/appimagetool-x86_64.AppImage
+      chmod +x ./appimagetool.AppImage
+  - name: build-${{ matrix.target }}
+    run: |
+      invoke ci.update-version --version=${{ steps.get_version.outputs.VERSION }}
+      cargo build --release --target ${{ matrix.target }}
+      cp ./target/${{ matrix.target }}/release/${{ matrix.target }} ./pkg/appimage/senile.AppImage/usr/bin/
+      cd ./pkg/appimage && ARCH=${{ matrix.arch }} ../../appimagetool.AppImage ./senile.AppImage && cd ../../
+  - name: upload asset
+    uses: svenstaro/upload-release-action@v1-release
+    with:
+      repo_token: ${{ secrets.GITHUB_TOKEN }}
+      file: ./pkg/appimage/senile-${{ matrix.arch }}.AppImage
+      asset_name: senile-${{ matrix.arch }}.AppImage
+      tag: ${{ steps.get_version.outputs.VERSION }}
+      overwrite: true
 
   publish:
     needs: tag

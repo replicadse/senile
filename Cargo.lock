@@ -22,9 +22,9 @@ dependencies = [
 
 [[package]]
 name = "aquamarine"
-version = "0.1.8"
+version = "0.1.10"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "22b1adc0005f76e7f801e34de82ab4685de2d7019343ac3c03b4e08e8d639097"
+checksum = "796971668ab6bfd8970bb1688ba30dd1b59c223bd342b74a3336e641a7b8f0a9"
 dependencies = [
  "itertools",
  "proc-macro-error",
@@ -169,9 +169,9 @@ checksum = "e78d4f1cc4ae33bbfc157ed5d5a5ef3bc29227303d595861deb238fcec4e9457"
 
 [[package]]
 name = "fancy-regex"
-version = "0.5.0"
+version = "0.6.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "fe09872bd11351a75f22b24c3769fc863e8212d926d6db46b94ad710d14cc5cc"
+checksum = "3a3371ac125221b609ce0cf587a53fbb624fb56267bbe85cf1929350043bf360"
 dependencies = [
  "bit-set",
  "regex",
