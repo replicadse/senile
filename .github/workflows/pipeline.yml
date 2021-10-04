@@ -2,19 +2,6 @@ name: pipeline
 on: push
 
 jobs:
-  check-format:
-    name: check format
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v1
-      - name: install nightly
-        run: |
-          rustup default nightly
-          rustup component add cargo-fmt
-      - name: check formatting
-        run: |
-          cargo fmt -- --check
-
   build:
     name: check (${{ matrix.name }})
     runs-on: ubuntu-latest
