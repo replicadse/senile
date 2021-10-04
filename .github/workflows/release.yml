@@ -163,7 +163,7 @@ jobs:
       run: |
         invoke ci.update-version --version=${{ steps.get_version.outputs.VERSION }}
         cargo build --release --target ${{ matrix.target }}
-        cp ./target/${{ matrix.target }}/release/${{ matrix.target }} ./pkg/appimage/senile.AppImage/usr/bin/
+        cp ./target/${{ matrix.target }}/release/senile ./pkg/appimage/senile.AppImage/usr/bin/
         cd ./pkg/appimage && ARCH=${{ matrix.arch }} ../../appimagetool.AppImage ./senile.AppImage && cd ../../
     - name: upload asset
       uses: svenstaro/upload-release-action@v1-release
