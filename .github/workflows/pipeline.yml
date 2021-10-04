@@ -10,6 +10,7 @@ jobs:
       - name: install nightly
         run: |
           rustup default nightly
+          rustup component add cargo-fmt
       - name: check formatting
         run: |
           cargo fmt -- --check
