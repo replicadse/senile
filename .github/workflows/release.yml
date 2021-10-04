@@ -135,7 +135,7 @@ jobs:
         - os: ubuntu-latest
           target: x86_64-unknown-linux-gnu
           arch: x86_64
-          install: apt-get install build-essential
+          install: sudo apt-get install build-essential
     steps:
     - uses: actions/checkout@v1
     - name: get version
