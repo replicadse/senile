@@ -163,14 +163,16 @@ jobs:
       run: |
         invoke ci.update-version --version=${{ steps.get_version.outputs.VERSION }}
         cargo build --release --target ${{ matrix.target }}
-        cp ./target/${{ matrix.target }}/release/senile ./pkg/appimage/senile.AppImage/usr/bin/
-        cd ./pkg/appimage && ARCH=${{ matrix.arch }} ../../appimagetool.AppImage ./senile.AppImage && cd ../../
+        cp ./target/${{ matrix.target }}/release/senile ./pkg/appimage/senile.AppDir/usr/bin/senile
+        cd ./pkg/appimage && ARCH=${{ matrix.arch }} ../../appimagetool.AppImage ./senile.AppDir && cd ../../
+    - name: zip
+      run: cd ./pkg/appimage && tar -zcvf AppImage.${{ matrix.target }}.tar.gz senile-${{ matrix.arch }}.AppImage
     - name: upload asset
       uses: svenstaro/upload-release-action@v1-release
       with:
         repo_token: ${{ secrets.GITHUB_TOKEN }}
-        file: ./pkg/appimage/senile-${{ matrix.arch }}.AppImage
-        asset_name: senile-${{ matrix.arch }}.AppImage
+        file: ./pkg/appimage/AppImage.${{ matrix.target }}.tar.gz
+        asset_name: AppImage.${{ matrix.target }}.tar.gz
         tag: ${{ steps.get_version.outputs.VERSION }}
         overwrite: true
 
