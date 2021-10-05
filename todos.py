@@ -35,4 +35,3 @@ for assignee in data_assignee.keys():
     v = sorted(v, key=lambda x: x['priority'])
     for d in v:
         print_todo(d)
-
