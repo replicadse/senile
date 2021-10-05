@@ -17,4 +17,3 @@ provides=('senile')
 package() {
   cargo +stable install $pkgname --version=$pkgver --root="$pkgdir/usr" --no-track --all-features
 }
-

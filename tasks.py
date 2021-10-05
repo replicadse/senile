@@ -48,4 +48,3 @@ ns.add_collection(ns_other, 'other')
 ns_ci = Collection('ci')
 ns_ci.add_task(task_ci_updateversion, 'update-version')
 ns.add_collection(ns_ci, 'ci')
-

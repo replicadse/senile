@@ -29,4 +29,3 @@ fancy-regex = "^0.6.0"
 crossbeam = "^0.8.0"
 threadpool = "^1.8.1"
 aquamarine = "^0.1.9"
-

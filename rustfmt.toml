@@ -19,4 +19,3 @@ use_field_init_shorthand=true
 use_try_shorthand=true
 where_single_line=true
 wrap_comments=true
-
