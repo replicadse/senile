@@ -4,4 +4,3 @@ The ToDo items in this page below the line are automatically collected by `senil
 This is a prime example of a real life use-case of `senile`.
 
 * * *
-

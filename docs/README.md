@@ -12,4 +12,3 @@
 [![website](https://img.shields.io/badge/website-GitHub-blue)](https://replicadse.github.io/senile)\
 Collecting todo statements from code because we usually either ignore or forget about them.\
 Please visit the [wiki](https://replicadse.github.io/senile) for detailed information.
-
