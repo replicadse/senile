@@ -1,0 +1,39 @@
+---
+:doctype: article
+:date: 2021-10-10
+:draft: false
+---
+
+== Installation
+
+Installing `senile` can be done on numerous ways.
+
+=== The Rust way (via cargo)
+[source]
+----
+cargo install senile
+----
+
+=== The Arch way via AUR (with https://aur.archlinux.org/packages/yay/[yay]):
+[source]
+----
+yay -S senile
+----
+
+=== The AppImage way (`x86_64` example):
+[source]
+----
+curl -fSsL https://github.com/replicadse/senile/releases/latest/download/AppImage.x86_64.tar.gz > senile.AppImage.x86_64.tar.gz
+tar -xvzf ./senile.AppImage.x86_64.tar.gz
+rm ./senile.AppImage.x86_64.tar.gz
+chmod +x senile-x86_64.AppImage
+mkdir -p ~/bin
+mv senile-x86_64.AppImage ~/bin
+----
+NOTE: You might want to replace the `x86_64` part in the script above with your architecture.
+
+=== The Docker way
+[source]
+----
+docker run --rm  -v $HOST_PATH:/app/targets/mnt:ro replicadse/senile:latest collect -p=/app/targets
+----

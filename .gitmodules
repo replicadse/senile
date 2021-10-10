@@ -1,0 +1,6 @@
+[submodule "docs/wiki/themes/hugo-theme-techdoc"]
+	path = docs/wiki/themes/hugo-theme-techdoc
+	url = https://github.com/thingsym/hugo-theme-techdoc.git
+[submodule "docs/wiki/themes/book"]
+	path = docs/wiki/themes/book
+	url = https://github.com/alex-shpak/hugo-book

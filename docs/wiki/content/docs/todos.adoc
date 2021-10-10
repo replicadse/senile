@@ -1,0 +1,10 @@
+---
+:doctype: article
+:date: 2021-10-10
+:draft: false
+---
+
+== ToDos
+
+`senile` uses itself in it's build pipeline. These are the currently open ToDos in the project itself:
+

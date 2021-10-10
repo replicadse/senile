@@ -19,6 +19,7 @@ use crate::{
     commands::collect,
 };
 
+// TODO!(aw,min,1): Wow, it actually works!
 fn main() -> Result<(), Box<dyn Error>> {
     let args = ClapArgumentLoader::load()?;
     match args.command {
