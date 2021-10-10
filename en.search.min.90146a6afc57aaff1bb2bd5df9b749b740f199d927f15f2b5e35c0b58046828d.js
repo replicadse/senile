@@ -1,4 +1,4 @@
-'use strict';(function(){const searchDataURL='/senile/en.search-data.min.cfc4d5589b8dc1959e09fa97b2ba40c3509cdb3afa46a8584b20b4c8ac05b9a9.json';const indexConfig=Object.assign({cache:true},{doc:{id:'id',field:['title','content'],store:['title','href','section']}});const input=document.querySelector('#book-search-input');const results=document.querySelector('#book-search-results');if(!input){return}
+'use strict';(function(){const searchDataURL='/senile/en.search-data.min.4bb93e23ce9d5cb9bda4a85148ed318f8bbf14dfe78529ccc7c4a0bf4da772fb.json';const indexConfig=Object.assign({cache:true},{doc:{id:'id',field:['title','content'],store:['title','href','section']}});const input=document.querySelector('#book-search-input');const results=document.querySelector('#book-search-results');if(!input){return}
 input.addEventListener('focus',init);input.addEventListener('keyup',search);document.addEventListener('keypress',focusSearchFieldOnKeyPress);function focusSearchFieldOnKeyPress(event){if(input===document.activeElement){return;}
 const characterPressed=String.fromCharCode(event.charCode);if(!isHotkey(characterPressed)){return;}
 input.focus();event.preventDefault();}
