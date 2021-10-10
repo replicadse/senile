@@ -1,0 +1,151 @@
+= senile
+:toc: auto
+
+:description: README
+:license-type: MIT
+:repository-url: https://github.com/replicadse/senile
+:documentation-url: https://replicadse.github.io/senile
+:rouge-style: github
+:imagesdir: assets/images
+
+== Outline
+
+[cols="1,1,1,1", grid=none]
+|===
+|image:https://img.shields.io/crates/v/senile.svg[link=https://crates.io/crates/senile]
+|image:https://img.shields.io/crates/d/senile?label=crates.io%20downloads[link=https://crates.io/crates/senile]
+|image:https://img.shields.io/crates/d/senile?label=crates.io%20downloads[link=https://crates.io/crates/senile]
+|image:https://img.shields.io/badge/AUR-package-blue[link=https://aur.archlinux.org/packages/senile]
+
+|image:https://img.shields.io/docker/pulls/replicadse/senile[link=https://hub.docker.com/repository/docker/replicadse/senile]
+|image:https://github.com/replicadse/senile/workflows/pipeline/badge.svg[link=https://github.com/replicadse/senile/actions?query=workflow%3Apipeline]
+|image:https://deps.rs/repo/github/replicadse/senile/status.svg[link=https://deps.rs/repo/github/replicadse/senile]
+|image:https://img.shields.io/badge/docs.rs:crate-latest-blue[link=https://docs.rs/crate/senile/latest]
+|image:https://img.shields.io/badge/docs.rs:docs-latest-blue[link=https://docs.rs/senile/latest/senile]
+
+|image:https://img.shields.io/badge/home-GitHub-blue[link=https://github.com/replicadse/senile]
+|image:https://img.shields.io/badge/website-GitHub-blue[link=https://replicadse.github.io/senile]
+|
+|
+|===
+
+`senile` is a ToDo statement collection and aggregation program written in Rust. It's primary use case is the collection of open ToDo items within sourcecode, especially within a CI environment. +
+It's use shall counteract the habit of writing ToDo statements for eternity and forgetting about them until it's too late (like "ToDo: add security to API endpoint" as comment in the deployed production branch).
+
+== Installation
+
+Installing `senile` can be done on numerous ways.
+
+.The Rust way (via cargo)
+[source]
+----
+cargo install senile
+----
+
+.The Arch way via AUR (with https://aur.archlinux.org/packages/yay/[yay]):
+[source]
+----
+yay -S senile
+----
+
+.The AppImage way (`x86_64` example):
+[source]
+----
+curl -fSsL https://github.com/replicadse/senile/releases/latest/download/AppImage.x86_64.tar.gz > senile.AppImage.x86_64.tar.gz
+tar -xvzf ./senile.AppImage.x86_64.tar.gz
+rm ./senile.AppImage.x86_64.tar.gz
+chmod +x senile-x86_64.AppImage
+mkdir -p ~/bin
+mv senile-x86_64.AppImage ~/bin
+----
+
+.The Docker way
+[source]
+----
+docker run --rm  -v $HOST_PATH:/app/targets/mnt:ro replicadse/senile:latest collect -p=/app/targets
+----
+
+== Reference
+
+
+=== Disclaimer
+
+All features that are marked as `experimental` are _not_ considered a public API and therefore eplicitly not covered by the backwards-compatibility policy inside a major version (see https://semver.org[semver v2]). Use these features on your own risk!
+
+=== TODO format in code
+
+The default format is `// TODO!($priority, $assignee, $context_lines_below): $content`.\
+The priority and assignee are self explanatory. You can specify whatever string you want inside them.\
+The `$context_lines_below` argument tells the tool how many lines it shall include _below_ your comment as context.
+
+=== Application level arguments
+
+[cols="2,1,2,6"]
+|===
+|Name|Short|Long|Description
+
+|Experimental|-e|--experimental|Activates experimental features that are not stable yet. All features that are marked as experimental are ignored when keeping backwards compatibility inside one major version.
+|===
+
+=== Commands
+
+[cols="1,3,1"]
+|===
+|Command|Description|Status
+
+|help|Prints the help to `STDOUT`|stable
+|collect|Collects the todo statements|stable
+|===
+
+=== `collect` command flags
+
+[cols="1,1,2,2,2,1,1"]
+|===
+|Name|Short|Long|Description|Remark|Status|Multiple
+
+|Path|-p|--path|The path from which to start traversal.|None|stable|no
+|Workers|-w|--workers|The amount of workers (threads) used when parsing the collected files.|None|stable|no
+|Filter|-f|--filter|The regex for filtering the files that are to be parsed.|None|stable|no
+|Format||--format|The format of the todo statements that are parsed. It is the start literal followed by the end literal, separated with a comma.|Example: `--format="// TODO\(,):"`|stable|yes
+|===
+
+=== Examples
+- Basic usage: +
+`senile collect`
+- Specifying the root directory: +
+`senile collect -p ./src`
+- Specifying the file filter regex (only .rs files): +
+`senile collect -f="\.rs$"`
+- Specifying the todo statement format: +
+`senile collect --format="## TODO~[[,]]:"`
+- Specifying more formats: +
+`senile collect --format="// TODO!(,):" --format="## TODO~[[,]]:"`
+
+== `collect` command
+
+The `collect` command searches for all todo statements recursively from the given directory/file (tree). It collects information about the todo body, the priority, the file and the line in that file.\
+It will output a json formatted string to `STDOUT` as follows:\
+```json
+[
+  {
+    "prio": "$priority",
+    "assignee": "$assignee",
+    "body": "$todo_body",
+    "context": [
+      "$context_line",
+      "$context_line",
+      ...
+    ],
+    "file": "$fq_relative_file_path",
+    "line": $line
+  },
+  ...
+]
+```
+Note that these entries are string-sorted by their assigned priority.
+
+== Current ToDos
+
+The ToDo items in this page below the line are automatically collected by `senile` and appended during the build process.\
+This is a prime example of a real life use-case of `senile`.
+
