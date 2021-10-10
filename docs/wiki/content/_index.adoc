@@ -1,0 +1,15 @@
+---
+doctype: article
+title: Home
+date: 2021-10-10
+draft: false
+weight: 1
+---
+:toc:
+
+== Home
+
+include::./content/parts/status-table.adoc.part[]
+
+`senile` is a ToDo statement collection and aggregation program written in Rust. It's primary use case is the collection of open ToDo items within sourcecode, especially within a CI environment. +
+It's use shall counteract the habit of writing ToDo statements for eternity and forgetting about them until it's too late (like "ToDo: add security to API endpoint" as comment in the deployed production branch).

@@ -1,8 +1,11 @@
 ---
-:doctype: article
-:date: 2021-10-10
-:draft: false
+doctype: article
+title: Command reference
+date: 2021-10-10
+draft: false
+weight: 4
 ---
+:toc:
 
 == Disclaimer
 

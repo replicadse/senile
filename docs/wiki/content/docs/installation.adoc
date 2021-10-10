@@ -1,8 +1,11 @@
 ---
-:doctype: article
-:date: 2021-10-10
-:draft: false
+doctype: article
+title: Installation
+date: 2021-10-10
+draft: false
+weight: 3
 ---
+:toc:
 
 == Installation
 
@@ -27,8 +30,7 @@ curl -fSsL https://github.com/replicadse/senile/releases/latest/download/AppImag
 tar -xvzf ./senile.AppImage.x86_64.tar.gz
 rm ./senile.AppImage.x86_64.tar.gz
 chmod +x senile-x86_64.AppImage
-mkdir -p ~/bin
-mv senile-x86_64.AppImage ~/bin
+sudo mv senile-x86_64.AppImage /usr/bin/senile
 ----
 NOTE: You might want to replace the `x86_64` part in the script above with your architecture.
 

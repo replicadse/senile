@@ -1,8 +1,11 @@
 ---
-:doctype: article
-:date: 2021-10-10
-:draft: false
+doctype: article
+title: ToDos
+date: 2021-10-10
+draft: false
+weight: 5
 ---
+:toc:
 
 == ToDos
 
