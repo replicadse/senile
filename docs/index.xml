@@ -6,17 +6,18 @@
     <description>Recent content in Docs on senile wiki</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
+    <lastBuildDate>Sun, 10 Oct 2021 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="https://replicadse.github.io/senile/docs/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
-      <title></title>
-      <link>https://replicadse.github.io/senile/docs/home/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <title>Status</title>
+      <link>https://replicadse.github.io/senile/docs/status/</link>
+      <pubDate>Sun, 10 Oct 2021 00:00:00 +0000</pubDate>
       
-      <guid>https://replicadse.github.io/senile/docs/home/</guid>
-      <description>Home     
+      <guid>https://replicadse.github.io/senile/docs/status/</guid>
+      <description>    
  
  
  
@@ -27,27 +28,26 @@
    
  
  
-     senile is a ToDo statement collection and aggregation program written in Rust. It&amp;#8217;s primary use case is the collection of open ToDo items within sourcecode, especially within a CI environment.
-It&amp;#8217;s use shall counteract the habit of writing ToDo statements for eternity and forgetting about them until it&amp;#8217;s too late (like &#34;</description>
+     </description>
     </item>
     
     <item>
-      <title></title>
+      <title>Installation</title>
       <link>https://replicadse.github.io/senile/docs/installation/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <pubDate>Sun, 10 Oct 2021 00:00:00 +0000</pubDate>
       
       <guid>https://replicadse.github.io/senile/docs/installation/</guid>
-      <description>Installation Installing senile can be done on numerous ways.
- The Rust way (via cargo) cargo install senile    The Arch way via AUR (with yay): yay -S senile    The AppImage way (x86_64 example): curl -fSsL https://github.com/replicadse/senile/releases/latest/download/AppImage.x86_64.tar.gz &amp;gt; senile.AppImage.x86_64.tar.gz tar -xvzf ./senile.AppImage.x86_64.tar.gz rm ./senile.AppImage.x86_64.tar.gz chmod +x senile-x86_64.AppImage mkdir -p ~/bin mv senile-x86_64.AppImage ~/bin     Note  You might want to replace the x86_64 part in the script above with your architecture.</description>
+      <description>Table of Contents Installation The Rust way (via cargo) The Arch way via AUR (with yay): The AppImage way (x86_64 example): The Docker way     Installation Installing senile can be done on numerous ways.
+ The Rust way (via cargo) cargo install senile    The Arch way via AUR (with yay): yay -S senile    The AppImage way (x86_64 example): curl -fSsL https://github.com/replicadse/senile/releases/latest/download/AppImage.x86_64.tar.gz &amp;gt; senile.</description>
     </item>
     
     <item>
-      <title></title>
+      <title>ToDos</title>
       <link>https://replicadse.github.io/senile/docs/todos/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <pubDate>Sun, 10 Oct 2021 00:00:00 +0000</pubDate>
       
       <guid>https://replicadse.github.io/senile/docs/todos/</guid>
-      <description>ToDos senile uses itself in it&amp;#8217;s build pipeline. These are the currently open ToDos in the project itself:
+      <description>Table of Contents ToDos min     ToDos senile uses itself in it&amp;#8217;s build pipeline. These are the currently open ToDos in the project itself:
  min   prio: aw
 assignee: min
 body: Wow, it actually works!

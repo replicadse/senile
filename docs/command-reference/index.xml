@@ -1,22 +1,23 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>senile wiki</title>
+    <title>Command reference on senile wiki</title>
     <link>https://replicadse.github.io/senile/docs/command-reference/</link>
-    <description>Recent content on senile wiki</description>
+    <description>Recent content in Command reference on senile wiki</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
+    <lastBuildDate>Sun, 10 Oct 2021 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="https://replicadse.github.io/senile/docs/command-reference/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
-      <title></title>
+      <title>collect</title>
       <link>https://replicadse.github.io/senile/docs/command-reference/collect/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <pubDate>Sun, 10 Oct 2021 00:00:00 +0000</pubDate>
       
       <guid>https://replicadse.github.io/senile/docs/command-reference/collect/</guid>
-      <description>collect command reference     Name Short Long Description Remark Status Multiple     Path
+      <description>Table of Contents collect command reference Examples Output Default ToDo statement format in code     collect command reference     Name Short Long Description Remark Status Multiple     Path
  -p
  --path
  The path from which to start traversal.
@@ -26,13 +27,7 @@
    Workers
  -w
  --workers
- The amount of workers (threads) used when parsing the collected files.
- None
- stable
- no
-   Filter
- -f
- --filter</description>
+ The amount of workers (threads) used when parsing the collected files.</description>
     </item>
     
   </channel>
