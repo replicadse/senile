@@ -14,20 +14,17 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@master
-        with: 
+        with:
           submodules: true
-      - name: install
-        run: sudo apt-get install build-essential && cargo install mdbook --version=0.4.7
       - name: prepare
         run: |
           cargo +stable install senile
-          senile collect -f="(\.rs|\.py)$" --format="// TODO!(,):" --format="# TODO!(,):" -p . | ./docs/wiki/src/todos.py >> ./docs/wiki/src/todos/root.md
-      - name: build
-        working-directory: docs/wiki
-        run: mdbook build
+          mkdir -p ./docs/out
+          cp ./docs/README.adoc ./docs/out/
+          senile collect -f="(\.rs|\.py)$" --format="// TODO!(,):" --format="# TODO!(,):" -p . | ./docs/wiki/src/todos.py >> ./docs/out/README.adoc
       - name: deploy
         uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: docs/wiki/book
+          publish_dir: docs/out
           publish_branch: wiki
