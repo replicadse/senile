@@ -1,0 +1,1 @@
+if(navigator.serviceWorker){navigator.serviceWorker.register("/senile/sw.js",{scope:"/senile/"});}

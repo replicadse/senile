@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="collect command reference     Name Short Long Description Remark Status Multiple     Path
+ -p
+ --path
+ The path from which to start traversal.
+ None
+ stable
+ no
+   Workers
+ -w
+ --workers
+ The amount of workers (threads) used when parsing the collected files.
+ None
+ stable
+ no
+   Filter
+ -f
+ --filter">
+<meta name="theme-color" content="#FFFFFF">
+<meta name="color-scheme" content="light dark"><meta property="og:title" content="" />
+<meta property="og:description" content="collect command reference     Name Short Long Description Remark Status Multiple     Path
+ -p
+ --path
+ The path from which to start traversal.
+ None
+ stable
+ no
+   Workers
+ -w
+ --workers
+ The amount of workers (threads) used when parsing the collected files.
+ None
+ stable
+ no
+   Filter
+ -f
+ --filter" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://replicadse.github.io/senile/docs/command-reference/collect/" />
+
+<title>Collect | senile wiki</title>
+<link rel="manifest" href="/senile/manifest.json">
+<link rel="icon" href="/senile/favicon.png" type="image/x-icon">
+<link rel="stylesheet" href="/senile/book.min.d4dc77238886ba9b68049c5bf55f2cee407597ba579bac1c5c89e9faef0ed76c.css" integrity="sha256-1Nx3I4iGuptoBJxb9V8s7kB1l7pXm6wcXInp&#43;u8O12w=" crossorigin="anonymous">
+  <script defer src="/senile/flexsearch.min.js"></script>
+  <script defer src="/senile/en.search.min.663798074a4a947049f87cec1497d4ca426298ba3abd8d76d9871aba0f4bd592.js" integrity="sha256-ZjeYB0pKlHBJ&#43;HzsFJfUykJimLo6vY122Ycaug9L1ZI=" crossorigin="anonymous"></script>
+
+  <script defer src="/senile/sw.min.1859da25fa5a706f2de0b252f6ae176c25ac5bc56e92faf153a62aaecec2f9e5.js" integrity="sha256-GFnaJfpacG8t4LJS9q4XbCWsW8VukvrxU6Yqrs7C&#43;eU=" crossorigin="anonymous"></script>
+<!--
+Made with Book Theme
+https://github.com/alex-shpak/hugo-book
+-->
+  
+</head>
+<body dir="ltr">
+  <input type="checkbox" class="hidden toggle" id="menu-control" />
+  <input type="checkbox" class="hidden toggle" id="toc-control" />
+  <main class="container flex">
+    <aside class="book-menu">
+      <div class="book-menu-content">
+        
+  <nav>
+<h2 class="book-brand">
+  <a class="flex align-center" href="/senile/"><span>senile wiki</span>
+  </a>
+</h2>
+
+
+<div class="book-search">
+  <input type="text" id="book-search-input" placeholder="Search" aria-label="Search" maxlength="64" data-hotkeys="s/" />
+  <div class="book-search-spinner hidden"></div>
+  <ul id="book-search-results"></ul>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <ul>
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="https://replicadse.github.io/senile/docs/command-reference/" class="">Command Reference</a>
+  
+
+          
+  <ul>
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="https://replicadse.github.io/senile/docs/command-reference/collect/" class=" active">Collect</a>
+  
+
+        </li>
+      
+    
+  </ul>
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="https://replicadse.github.io/senile/docs/home/" class="">Home</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="https://replicadse.github.io/senile/docs/installation/" class="">Installation</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="https://replicadse.github.io/senile/docs/todos/" class="">Todos</a>
+  
+
+        </li>
+      
+    
+  </ul>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</nav>
+
+
+
+
+  <script>(function(){var menu=document.querySelector("aside .book-menu-content");addEventListener("beforeunload",function(event){localStorage.setItem("menu.scrollTop",menu.scrollTop);});menu.scrollTop=localStorage.getItem("menu.scrollTop");})();</script>
+
+
+ 
+      </div>
+    </aside>
+
+    <div class="book-page">
+      <header class="book-header">
+        
+  <div class="flex align-center justify-between">
+  <label for="menu-control">
+    <img src="/senile/svg/menu.svg" class="book-icon" alt="Menu" />
+  </label>
+
+  <strong>Collect</strong>
+
+  <label for="toc-control">
+    
+    <img src="/senile/svg/toc.svg" class="book-icon" alt="Table of Contents" />
+    
+  </label>
+</div>
+
+
+  
+  <aside class="hidden clearfix">
+    
+  
+
+
+
+
+  </aside>
+  
+ 
+      </header>
+
+      
+      
+  <article class="markdown"><div class="sect1">
+<h2 id="_collect_command_reference"><code>collect</code> command reference</h2>
+<div class="sectionbody">
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 10%;">
+<col style="width: 10%;">
+<col style="width: 20%;">
+<col style="width: 20%;">
+<col style="width: 20%;">
+<col style="width: 10%;">
+<col style="width: 10%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Name</th>
+<th class="tableblock halign-left valign-top">Short</th>
+<th class="tableblock halign-left valign-top">Long</th>
+<th class="tableblock halign-left valign-top">Description</th>
+<th class="tableblock halign-left valign-top">Remark</th>
+<th class="tableblock halign-left valign-top">Status</th>
+<th class="tableblock halign-left valign-top">Multiple</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Path</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">-p</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">--path</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The path from which to start traversal.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">None</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">stable</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">no</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Workers</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">-w</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">--workers</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The amount of workers (threads) used when parsing the collected files.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">None</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">stable</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">no</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Filter</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">-f</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">--filter</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The regex for filtering the files that are to be parsed.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">None</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">stable</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">no</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Format</p></td>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">--format</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The format of the todo statements that are parsed. It is the start literal followed by the end literal, separated with a comma.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Example: <code>--format="// TODO::(,):"</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">stable</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">yes</p></td>
+</tr>
+</tbody>
+</table>
+<div class="sect2">
+<h3 id="_examples">Examples</h3>
+<div class="ulist">
+<ul>
+<li>
+<p>Basic usage:<br>
+<code>senile collect</code></p>
+</li>
+<li>
+<p>Specifying the root directory:<br>
+<code>senile collect -p ./src</code></p>
+</li>
+<li>
+<p>Specifying the file filter regex (only .rs files):<br>
+<code>senile collect -f="\.rs$"</code></p>
+</li>
+<li>
+<p>Specifying the todo statement format:<br>
+<code>senile collect --format="## TODO~[[,]]:"</code></p>
+</li>
+<li>
+<p>Specifying more formats:<br>
+<code>senile collect --format="// TODO!(,):" --format="## TODO~[[,]]:"</code></p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_output">Output</h3>
+<div class="paragraph">
+<p>The <code>collect</code> command searches for all todo statements recursively from the given directory/file (tree). It collects information about the todo body, the priority, the file and the line in that file.\
+It will output a json formatted string to <code>STDOUT</code> as follows:\</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-json" data-lang="json">[
+  {
+    "prio": "$priority",
+    "assignee": "$assignee",
+    "body": "$todo_body",
+    "context": [
+      "$context_line",
+      "$context_line",
+      ...
+    ],
+    "file": "$fq_relative_file_path",
+    "line": $line
+  },
+  ...
+]</code></pre>
+</div>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<div class="title">Note</div>
+</td>
+<td class="content">
+These entries are string-sorted by their assigned priority.
+</td>
+</tr>
+</table>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_default_todo_statement_format_in_code">Default ToDo statement format in code</h3>
+<div class="paragraph">
+<p>The default format is <code>// TODO!($priority, $assignee, $context_lines_below): $content</code>.\
+The priority and assignee are self explanatory. You can specify whatever string you want inside them.\
+The <code>$context_lines_below</code> argument tells the tool how many lines it shall include <em>below</em> your comment as context.</p>
+</div>
+</div>
+</div>
+</div>
+</article>
+ 
+      
+
+      <footer class="book-footer">
+        
+  <div class="flex flex-wrap justify-between">
+
+
+
+
+
+</div>
+
+
+
+  <script>(function(){function select(element){const selection=window.getSelection();const range=document.createRange();range.selectNodeContents(element);selection.removeAllRanges();selection.addRange(range);}
+document.querySelectorAll("pre code").forEach(code=>{code.addEventListener("click",function(event){select(code.parentElement);if(navigator.clipboard){navigator.clipboard.writeText(code.parentElement.textContent);}});});})();</script>
+
+
+ 
+        
+      </footer>
+
+      
+  
+  <div class="book-comments">
+
+</div>
+  
+ 
+
+      <label for="menu-control" class="hidden book-menu-overlay"></label>
+    </div>
+
+    
+    <aside class="book-toc">
+      <div class="book-toc-content">
+        
+  
+
+
+
+ 
+      </div>
+    </aside>
+    
+  </main>
+
+  
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
